@@ -16,9 +16,11 @@
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: theme('fontFamily.sans'); /* uses Inter from Tailwind config */
 }
+
 
 body {
   color: var(--foreground);
