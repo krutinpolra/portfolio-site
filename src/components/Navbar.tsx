@@ -17,12 +17,32 @@ export default function Navbar() {
   
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [showNav, setShowNav] = useState(true);
+  
   useEffect(() => {
     const contentEl = document.getElementById('page-content');
     if (contentEl) {
       contentEl.style.marginTop = menuOpen ? '400px' : '0px';
     }
   }, [menuOpen]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+
+      if (currentScroll > lastScrollY && currentScroll > 100) {
+        setShowNav(false); // Scroll Down → Hide
+      } else {
+        setShowNav(true); // Scroll Up → Show
+      }
+
+      setLastScrollY(currentScroll);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
   
   return (
     <header className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-full px-4">
@@ -32,24 +52,31 @@ export default function Navbar() {
 
         {/* Desktop Pill Nav */}
         <div className="hidden md:flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
-        <ul className="flex space-x-2 items-center text-sm font-medium text-white dark:text-gray-200 px-4 py-2 bg-black/40 dark:bg-white/10 border border-white/10 shadow-xl backdrop-blur-md rounded-full">
-
-            {navLinks.map(({ name, href }) => (
-              <li key={name} className="relative">
-                  <Link
-                    href={href}
-                    className={`px-4 py-1.5 rounded-full transition-all duration-200 ${
-                      pathname === href
-                        ? 'text-indigo-400 font-semibold'
-                        : 'hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40'
-                    }`}
-                  >
-
-                  {name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+        <motion.ul
+          animate={{ y: showNav ? 0 : -120 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          className="flex space-x-2 items-center text-sm font-medium text-white dark:text-gray-200 px-4 py-2 bg-black/40 dark:bg-white/10 border border-white/10 shadow-xl backdrop-blur-md rounded-full"
+        >
+          {navLinks.map(({ name, href }) => (
+            <motion.li
+              key={name}
+              className="relative"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link
+                href={href}
+                className={`px-4 py-1.5 rounded-full transition-all duration-200 ${
+                  pathname === href
+                    ? 'text-indigo-400 font-semibold'
+                    : 'hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40'
+                }`}
+              >
+                {name}
+              </Link>
+            </motion.li>
+          ))}
+        </motion.ul>
         </div>
 
         {/* Mobile Hamburger Button */}
