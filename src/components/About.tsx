@@ -194,7 +194,9 @@ export default function About() {
           transition={{ duration: 0.5 }}
         >
           <a
-            href="/resume"
+            href="/Resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block px-6 py-3 border border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white rounded-full transition"
           >
             View My Resume
