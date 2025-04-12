@@ -24,15 +24,15 @@ export default function ParticlesBackground() {
         interactivity: {
           events: {
             onHover: { enable: true, mode: 'repulse' },
-            resize: true
+            resize: true,
           },
           modes: {
             repulse: {
               distance: 100,
-              duration: 0.4
-            }
-          }
-        },        
+              duration: 0.4,
+            },
+          },
+        },
         fpsLimit: 60,
         particles: {
           number: {

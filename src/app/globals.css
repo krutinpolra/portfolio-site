@@ -21,7 +21,6 @@ body {
   font-family: theme('fontFamily.sans'); /* uses Inter from Tailwind config */
 }
 
-
 body {
   color: var(--foreground);
   background: var(--background);
@@ -45,4 +44,101 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+/* in globals.css */
+.glitch-bg {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.glitch-bg::before,
+.glitch-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.glitch-bg::before {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(129, 140, 248, 0.15),
+    /* indigo-400 */ rgba(192, 132, 252, 0.2) 1px,
+    /* purple-500 */ transparent 1px,
+    transparent 2px
+  );
+  animation: flicker 1.8s infinite alternate;
+}
+
+.glitch-bg::after {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(138, 92, 246),
+    transparent 70%
+  );
+  opacity: 0.2;
+  animation: pulse 4s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* Rename glitch to subtle-bg or animated-bg */
+.animated-bg {
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.animated-bg::before,
+.animated-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.animated-bg::before {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(129, 140, 248, 0.05),
+    rgba(192, 132, 252, 0.08) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  animation: flicker 2s infinite alternate;
+}
+
+.animated-bg::after {
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgb(138, 92, 246),
+    transparent 70%
+  );
+  opacity: 0.1;
+  animation: pulse 5s ease-in-out infinite;
 }

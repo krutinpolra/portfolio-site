@@ -1,12 +1,15 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import ParticlesBackground from './ParticlesBackground';
+import ParticlesBackground from '../assets/animatedComponent/ParticlesBackground';
 import { TypeAnimation } from 'react-type-animation';
 
 export default function Hero() {
   return (
-    <section className="relative flex flex-col justify-center items-center h-[100vh] text-center px-6 overflow-hidden mt-0 pt-0">
+    <section
+      id="hero"
+      className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-[#0b0b1d] to-[#141428]"
+    >
       <ParticlesBackground />
       {/* Background Glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900 opacity-90 -z-10" />
@@ -33,7 +36,9 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          Hello 👋 I’m <span className="font-semibold text-white">Krutin</span>, a full stack developer passionate about transforming ideas into functional products.
+          Hello 👋 I’m <span className="font-semibold text-white">Krutin</span>,
+          a full stack developer passionate about transforming ideas into
+          functional products.
         </motion.p>
 
         {/* CTA Buttons */}
@@ -49,12 +54,6 @@ export default function Hero() {
           >
             Let’s Connect
           </a>
-          <a
-            href="/resume"
-            className="px-6 py-3 rounded-full border border-white text-white hover:bg-white hover:text-black transition"
-          >
-            View Resume
-          </a>
         </motion.div>
 
         {/* Scroll Cue */}
@@ -66,7 +65,6 @@ export default function Hero() {
           <span className="mb-1">scroll</span>
           <span className="text-2xl">↓</span>
         </motion.div>
-
       </div>
     </section>
   );
