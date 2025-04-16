@@ -77,9 +77,9 @@ export default function About() {
   return (
     <section
       id="about"
-      className="relative pb-20 min-h-screen py-24 px-6 text-white bg-gradient-to-b from-black via-[#0b0b1d] to-[#141428] overflow-hidden"
+      className="relative overflow-hidden pb-20 min-h-screen py-24 px-6 text-white bg-gradient-to-b from-black via-[#0b0b1d] to-[#141428] overflow-hidden"
     >
-      <ParticlesSnow />
+      <ParticlesSnow id="tsparticles-about" />
 
       <div className="max-w-5xl mx-auto text-center relative z-10">
         {/* Heading with waving hand */}

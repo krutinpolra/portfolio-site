@@ -30,6 +30,7 @@ import {
   SiSass,
   SiExpress,
 } from 'react-icons/si';
+import ParticlesSnow from '@/assets/animatedComponent/ParticlesSnow';
 
 const categories = ['Frontend', 'Backend', 'Deployment', 'Database', 'Cloud'];
 
@@ -101,9 +102,11 @@ export default function TechStack() {
   return (
     <section
       id="techstack"
-      className="relative pt-20 py-24 px-6 text-white bg-gradient-to-b from-[#141428] via-[#1a1a30] to-black"
+      className="relative overflow-hidden pb-20 py-24 px-6 text-white bg-gradient-to-b from-[#141428] via-[#1a1a30] to-black"
     >
-      <div className="max-w-6xl mx-auto text-center">
+      <ParticlesSnow id="tsparticles-techStack" />
+
+      <div className="max-w-6xl mx-auto text-center relative z-10">
         <motion.h2
           className="text-4xl font-bold mb-10 relative inline-block text-center text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-500 to-fuchsia-400"
           initial={{ opacity: 0, y: 50 }}

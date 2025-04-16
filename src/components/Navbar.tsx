@@ -8,9 +8,9 @@ const navLinks = [
   { name: 'Home', href: '/' },
   { name: 'About', href: '#about' },
   { name: 'Skills', href: '#techstack' },
-  { name: 'Projects', href: '/projects' },
+  { name: 'Projects', href: '#projects' },
   { name: 'Contact', href: '/contact' },
-  { name: 'Resume', href: '/resume' },
+  { name: 'Resume', href: '/resume.pdf', external: true },
 ];
 
 export default function Navbar() {
@@ -56,23 +56,34 @@ export default function Navbar() {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="flex space-x-2 items-center text-sm font-medium text-white dark:text-gray-200 px-4 py-2 bg-black/40 dark:bg-white/10 border border-white/10 shadow-xl backdrop-blur-md rounded-full"
           >
-            {navLinks.map(({ name, href }) => (
+            {navLinks.map(({ name, href, external }) => (
               <motion.li
                 key={name}
                 className="relative"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Link
-                  href={href}
-                  className={`px-4 py-1.5 rounded-full transition-all duration-200 ${
-                    pathname === href
-                      ? 'text-indigo-400 font-semibold'
-                      : 'hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40'
-                  }`}
-                >
-                  {name}
-                </Link>
+                {external ? (
+                  <a
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`px-4 py-1.5 rounded-full transition-all duration-200 hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40`}
+                  >
+                    {name}
+                  </a>
+                ) : (
+                  <Link
+                    href={href}
+                    className={`px-4 py-1.5 rounded-full transition-all duration-200 ${
+                      pathname === href
+                        ? 'text-indigo-400 font-semibold'
+                        : 'hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40'
+                    }`}
+                  >
+                    {name}
+                  </Link>
+                )}
               </motion.li>
             ))}
           </motion.ul>
