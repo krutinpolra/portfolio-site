@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import Image from 'next/image';
 import Lottie from 'lottie-react';
 import CollaborationAnimation from '../assets/Animated-Icons/Collaboration.json';
@@ -108,6 +109,7 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7 }}
         >
+          {/* Profile Picture */}
           <Image
             src={profilePic}
             alt="Profile picture"
@@ -116,16 +118,13 @@ export default function About() {
             className="w-[450px] h-[350px] object-cover rounded-[2rem] border-4 border-indigo-500 shadow-2xl"
           />
 
-          <div className="max-w-xl text-gray-300 text-lg leading-relaxed">
+          {/* Text & Icons */}
+          <div className="max-w-xl text-gray-300 text-lg leading-relaxed text-center">
             <p>
               Hi, I’m{' '}
               <span className="text-indigo-400 font-semibold">Krutin</span>,
               have a solid foundation in web development and cloud technology
-              and a passion for creating full stack web applications. I have
-              experience in building and deploying applications using modern
-              frameworks and tools. I am proficient in JavaScript, TypeScript,
-              React, Node.js, and MongoDB. I also have experience with cloud
-              platforms like AWS and Azure.
+              and a passion for creating full stack web applications.
             </p>
             <p className="mt-4">
               I love building accessible, scalable, and visually rich
@@ -133,6 +132,51 @@ export default function About() {
               <span className="text-purple-400">React, Node.js, MongoDB</span>,
               and cloud tools.
             </p>
+
+            {/* Social Links */}
+            <motion.div
+              className="flex justify-center gap-6 mt-6"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
+              <motion.a
+                href="https://github.com/krutinpolra"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className="bg-indigo-500/20 p-4 rounded-full text-indigo-400 hover:text-white text-3xl shadow-md hover:shadow-indigo-500 transition-all"
+              >
+                <FaGithub />
+              </motion.a>
+
+              <motion.a
+                href="https://www.linkedin.com/in/krutinpolra1444/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="View on LinkedIn"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className="bg-indigo-500/20 p-4 rounded-full text-indigo-400 hover:text-white text-3xl shadow-md hover:shadow-indigo-500 transition-all"
+              >
+                <FaLinkedin />
+              </motion.a>
+              <motion.a
+                href="https://www.instagram.com/k_p_1444/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="View on Instagram"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+                className="bg-indigo-500/20 p-4 rounded-full text-indigo-400 hover:text-white text-3xl shadow-md hover:shadow-indigo-500 transition-all"
+              >
+                <FaInstagram />
+              </motion.a>
+            </motion.div>
           </div>
         </motion.div>
 

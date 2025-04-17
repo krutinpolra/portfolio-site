@@ -5,12 +5,12 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 const navLinks = [
-  { name: 'Home', href: '/' },
+  { name: 'Home', href: '/main' },
   { name: 'About', href: '#about' },
   { name: 'Skills', href: '#techstack' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Contact', href: '/contact' },
+  { name: 'Projects', href: '#projectsection' },
   { name: 'Resume', href: '/resume.pdf', external: true },
+  { name: 'Contact', href: '/contact' },
 ];
 
 export default function Navbar() {

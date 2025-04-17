@@ -8,10 +8,10 @@ import Link from 'next/link';
 
 const cardVariants: Variants = {
   offscreen: {
-    y: 300,
+    y: 200,
   },
   onscreen: {
-    y: 50,
+    y: 0,
     rotate: -10,
     transition: {
       type: 'spring',
@@ -53,7 +53,7 @@ export default function ProjectCard({
         {/* Card content */}
         <motion.div className="project-card" variants={cardVariants}>
           {/* Project Image */}
-          <div className="relative w-full h-60 overflow-hidden rounded-t-xl group">
+          <div className="relative w-full h-60 overflow-visible rounded-t-xl group">
             <Image
               src={image}
               alt={title}

@@ -8,12 +8,12 @@ import ParticlesSnow from '@/assets/animatedComponent/ParticlesSnow';
 
 const allCategories = [
   'All',
-  'C++',
+  'Full-Stack',
   'Java',
-  'Mobile App Dev',
-  'Next.js',
+  'Cloud',
   'React',
-  'MongoDB',
+  'Python',
+  'Hackathons',
 ];
 
 export default function ProjectSection() {
@@ -23,7 +23,7 @@ export default function ProjectSection() {
     selected === 'All'
       ? projects
       : projects.filter(p =>
-          p.techStack.some(stack =>
+          p.Category.some(stack =>
             stack.toLowerCase().includes(selected.toLowerCase())
           )
         );
@@ -55,7 +55,7 @@ export default function ProjectSection() {
         </motion.h2>
 
         {/* Filter Tabs */}
-        <div className="flex flex-wrap justify-center gap-3 mb-16">
+        <div className="flex flex-wrap justify-center gap-3 mb-10">
           {allCategories.map(category => (
             <motion.button
               key={category}
