@@ -1,6 +1,8 @@
+// src/app/layout.tsx
 import '../styles/globals.css';
-import Navbar from '@/components/Navbar';
+import NavbarWrapper from '@/components/NavbarWrapper';
 import { Poppins } from 'next/font/google';
+
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '600', '700'] });
 
 export const metadata = {
@@ -15,8 +17,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${poppins.className} ...`}>
-        <Navbar />
+      <body className={poppins.className}>
+        <NavbarWrapper />
         <main
           id="page-content"
           className="transition-all duration-500 ease-in-out"

@@ -10,10 +10,13 @@ const navLinks = [
   { name: 'Skills', href: '#techstack' },
   { name: 'Projects', href: '#projectsection' },
   { name: 'Resume', href: '/resume.pdf', external: true },
-  { name: 'Contact', href: '/contact' },
+  { name: 'Contact', href: '#contact' },
 ];
+type NavbarProps = {
+  onOpenContact: () => void;
+};
 
-export default function Navbar() {
+export default function Navbar({ onOpenContact }: NavbarProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -63,23 +66,29 @@ export default function Navbar() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {external ? (
+                {name === 'Contact' ? (
+                  <button
+                    onClick={onOpenContact}
+                    className={`px-4 py-1.5 rounded-full transition-all duration-200
+                                hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40`}
+                  >
+                    {name}
+                  </button>
+                ) : external ? (
                   <a
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`px-4 py-1.5 rounded-full transition-all duration-200 hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40`}
+                    className={`px-4 py-1.5 rounded-full transition-all duration-200
+                    ${pathname === href ? 'text-indigo-400 ring-1 ring-indigo-400/40' : 'hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40'}`}
                   >
                     {name}
                   </a>
                 ) : (
                   <Link
                     href={href}
-                    className={`px-4 py-1.5 rounded-full transition-all duration-200 ${
-                      pathname === href
-                        ? 'text-indigo-400 font-semibold'
-                        : 'hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40'
-                    }`}
+                    className={`px-4 py-1.5 rounded-full transition-all duration-200
+                    ${pathname === href ? 'text-indigo-400 ring-1 ring-indigo-400/40' : 'hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40'}`}
                   >
                     {name}
                   </Link>
@@ -125,15 +134,27 @@ export default function Navbar() {
             >
               {navLinks.map(({ name, href }) => (
                 <li key={name}>
-                  <Link
-                    href={href}
-                    onClick={() => setMenuOpen(false)}
-                    className={`block hover:text-indigo-400 transition ${
-                      pathname === href ? 'text-indigo-400' : ''
-                    }`}
-                  >
-                    {name}
-                  </Link>
+                  {name === 'Contact' ? (
+                    <button
+                      onClick={() => {
+                        setMenuOpen(false);
+                        onOpenContact();
+                      }}
+                      className="block text-white hover:text-indigo-400 transition"
+                    >
+                      {name}
+                    </button>
+                  ) : (
+                    <Link
+                      href={href}
+                      onClick={() => setMenuOpen(false)}
+                      className={`block hover:text-indigo-400 transition ${
+                        pathname === href ? 'text-indigo-400' : ''
+                      }`}
+                    >
+                      {name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </motion.ul>

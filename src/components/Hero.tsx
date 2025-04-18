@@ -3,14 +3,18 @@
 import { motion } from 'framer-motion';
 import ParticlesBackground from '../assets/animatedComponent/ParticlesBackground';
 import { TypeAnimation } from 'react-type-animation';
+import { useState } from 'react';
+import ContactModal from './contact';
 
 export default function Hero() {
+  const [isModalOpen, setModalOpen] = useState(false);
   return (
     <section
       id="hero"
       className="min-h-screen flex items-center justify-center bg-gradient-to-b from-black via-[#0b0b1d] to-[#141428]"
     >
       <ParticlesBackground />
+      <ContactModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
       {/* Background Glow */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-gray-900 opacity-90 -z-10" />
       <div className="absolute w-[60vw] h-[60vw] bg-indigo-600 blur-[120px] rounded-full opacity-30 top-10 left-10 -z-10" />
@@ -48,12 +52,12 @@ export default function Hero() {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
         >
-          <a
-            href="#contact"
+          <button
+            onClick={() => setModalOpen(true)}
             className="px-6 py-3 rounded-full bg-indigo-500 text-white font-semibold hover:bg-indigo-600 transition"
           >
             Let’s Connect
-          </a>
+          </button>
         </motion.div>
 
         {/* Scroll Cue */}
