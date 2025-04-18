@@ -4,7 +4,9 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import Image from 'next/image';
-import Lottie from 'lottie-react';
+const Lottie = dynamic(() => import('lottie-react'), {
+  ssr: false,
+});
 import CollaborationAnimation from '../assets/Animated-Icons/Collaboration.json';
 import BrainStorming from '../assets/Animated-Icons/BrainStorming.json';
 import Communication from '../assets/Animated-Icons/Communication.json';

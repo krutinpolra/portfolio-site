@@ -6,7 +6,14 @@ const ParticlesBackground = dynamic(
   () => import('@/assets/animatedComponent/ParticlesBackground'),
   { ssr: false }
 );
-import { TypeAnimation } from 'react-type-animation';
+const TypeAnimation = dynamic(
+  async () => {
+    const { TypeAnimation } = await import('react-type-animation');
+    return TypeAnimation;
+  },
+  { ssr: false }
+);
+
 import { useState } from 'react';
 import ContactModal from './contact';
 
