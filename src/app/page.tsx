@@ -1,10 +1,15 @@
-// This will redirect "/" → "/main"
-export default function RedirectToMain() {
+import Hero from '@/components/Hero';
+import TechStack from '@/components/TechStack';
+import About from '@/components/About';
+import ProjectSection from '@/components/ProjectSection';
+
+export default function HomePage() {
   return (
-    <script
-      dangerouslySetInnerHTML={{
-        __html: `window.location.href = "/main"`,
-      }}
-    />
+    <>
+      <Hero />
+      <About />
+      <TechStack />
+      <ProjectSection />
+    </>
   );
 }

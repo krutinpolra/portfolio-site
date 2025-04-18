@@ -25,7 +25,7 @@ export const projects: Project[] = [
     title: 'Fragments API',
     description:
       'A file storage and conversion API supporting Markdown rendering, image transformations, and AWS integrations.',
-    image: '/images/fragment-microservice.png', // replace with your actual image path
+    image: '/images/fragment-microservice-1.png', // replace with your actual image path
     techStack: ['Node.js', 'Express', 'AWS', 'MongoDB'],
     hueA: 235,
     hueB: 265,

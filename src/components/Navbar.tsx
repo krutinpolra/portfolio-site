@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 const navLinks = [
-  { name: 'Home', href: '/main' },
+  { name: 'Home', href: '/' },
   { name: 'About', href: '#about' },
   { name: 'Skills', href: '#techstack' },
   { name: 'Projects', href: '#projectsection' },
