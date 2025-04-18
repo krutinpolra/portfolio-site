@@ -30,7 +30,11 @@ import {
   SiSass,
   SiExpress,
 } from 'react-icons/si';
-import ParticlesSnow from '@/assets/animatedComponent/ParticlesSnow';
+import dynamic from 'next/dynamic';
+const ParticleSnow = dynamic(
+  () => import('@/assets/animatedComponent/ParticlesSnow'),
+  { ssr: false }
+);
 
 const categories = ['Frontend', 'Backend', 'Deployment', 'Database', 'Cloud'];
 
@@ -104,7 +108,7 @@ export default function TechStack() {
       id="techstack"
       className="relative overflow-hidden pb-20 py-24 px-6 text-white bg-gradient-to-b from-[#141428] via-[#1a1a30] to-black"
     >
-      <ParticlesSnow id="tsparticles-techStack" />
+      <ParticleSnow id="tsparticles-techStack" />
 
       <div className="max-w-6xl mx-auto text-center relative z-10">
         <motion.h2

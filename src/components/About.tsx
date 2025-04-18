@@ -12,7 +12,11 @@ import AttensionToDetails from '../assets/Animated-Icons/AttensionToDetails.json
 import Growth from '../assets/Animated-Icons/Growth.json';
 
 import profilePic from '@/assets/images/profilepic2.jpg';
-import ParticlesSnow from '@/assets/animatedComponent/ParticlesSnow';
+import dynamic from 'next/dynamic';
+const ParticleSnow = dynamic(
+  () => import('@/assets/animatedComponent/ParticlesSnow'),
+  { ssr: false }
+);
 
 const values = [
   {
@@ -80,7 +84,7 @@ export default function About() {
       id="about"
       className="relative overflow-hidden pb-20 min-h-screen py-24 px-6 text-white bg-gradient-to-b from-black via-[#0b0b1d] to-[#141428] overflow-hidden"
     >
-      <ParticlesSnow id="tsparticles-about" />
+      <ParticleSnow id="tsparticles-about" />
 
       <div className="max-w-5xl mx-auto text-center relative z-10">
         {/* Heading with waving hand */}

@@ -1,7 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import ParticlesBackground from '../assets/animatedComponent/ParticlesBackground';
+import dynamic from 'next/dynamic';
+const ParticlesBackground = dynamic(
+  () => import('@/assets/animatedComponent/ParticlesBackground'),
+  { ssr: false }
+);
 import { TypeAnimation } from 'react-type-animation';
 import { useState } from 'react';
 import ContactModal from './contact';

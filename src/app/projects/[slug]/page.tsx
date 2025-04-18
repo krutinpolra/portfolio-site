@@ -4,7 +4,12 @@ import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { projectDetails } from '@/model/projectDetail.model';
 import Image from 'next/image';
-import ParticleSnow from '@/assets/animatedComponent/ParticlesSnow';
+import dynamic from 'next/dynamic';
+const ParticleSnow = dynamic(
+  () => import('@/assets/animatedComponent/ParticlesSnow'),
+  { ssr: false }
+);
+
 import { motion, AnimatePresence } from 'framer-motion';
 import { notFound } from 'next/navigation';
 import { FaGithub } from 'react-icons/fa';

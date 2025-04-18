@@ -4,7 +4,11 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectCard from './ProjectCard';
 import { projects } from '@/model/project.model';
-import ParticlesSnow from '@/assets/animatedComponent/ParticlesSnow';
+import dynamic from 'next/dynamic';
+const ParticleSnow = dynamic(
+  () => import('@/assets/animatedComponent/ParticlesSnow'),
+  { ssr: false }
+);
 
 const allCategories = [
   'All',
@@ -33,7 +37,7 @@ export default function ProjectSection() {
       id="projectsection"
       className="relative overflow-hidden pb-20 min-h-screen py-24 px-6 text-white bg-gradient-to-b from-black via-[#0b0b1d] to-[#141428]"
     >
-      <ParticlesSnow id="tsparticles-projects" />
+      <ParticleSnow id="tsparticles-projects" />
 
       <div className="max-w-6xl mx-auto text-center relative z-10">
         <motion.h2
