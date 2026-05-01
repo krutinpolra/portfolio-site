@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectCard from './ProjectCard';
-import { projects } from '@/model/project.model';
+import { projects } from '@/model/Project.data';
 import dynamic from 'next/dynamic';
 const ParticleSnow = dynamic(
   () => import('@/assets/animatedComponent/ParticlesSnow'),

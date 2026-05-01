@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import type { Variants } from 'motion/react';
 import Image from 'next/image';
-import type { Project } from '@/model/project.model';
+import type { Project } from '@/model/projectModel/project.model';
 import Link from 'next/link';
 
 const cardVariants: Variants = {

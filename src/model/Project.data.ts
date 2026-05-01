@@ -1,13 +1,4 @@
-export interface Project {
-  title: string;
-  description: string;
-  image: string;
-  techStack: string[];
-  hueA: number;
-  hueB: number;
-  slug: string;
-  Category: string[]; // Optional category field
-}
+import type { Project } from './projectModel/project.model';
 
 export const projects: Project[] = [
   {
