@@ -148,9 +148,10 @@ a {
 .project-container {
   display: grid;
   position: relative;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
   gap: 40px;
   max-width: 1000px;
+  width: 100%;
   margin: 0 auto;
   z-index: 10; /* optional but helpful */
 }
@@ -158,11 +159,13 @@ a {
 .project-card-container {
   overflow: hidden;
   display: flex;
-  height: 450px;
+  min-height: 450px;
+  width: 100%;
   justify-content: center;
   align-items: start;
   position: relative;
   margin-bottom: 0;
+  min-width: 0;
 }
 
 .project-splash {
@@ -185,9 +188,8 @@ a {
 }
 
 .project-card {
-  font-size: 164px;
-  width: 400px;
-  height: 430px;
+  width: min(100%, 400px);
+  min-height: 430px;
   justify-content: center;
   align-items: center;
   background-color: #11111a;

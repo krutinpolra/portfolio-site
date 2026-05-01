@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { type FormEvent, useState } from 'react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { FiMail } from 'react-icons/fi';
 
@@ -16,6 +16,45 @@ export default function ContactModal({ isOpen, onClose }: Props) {
     email: '',
     message: '',
   });
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>(
+    'idle'
+  );
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleClose = () => {
+    if (status === 'sending') return;
+    setStatus('idle');
+    setErrorMessage('');
+    onClose();
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setStatus('sending');
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const result = (await response.json()) as { error?: string };
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Unable to send message right now');
+      }
+
+      setStatus('sent');
+      setFormData({ name: '', email: '', message: '' });
+      window.setTimeout(handleClose, 1200);
+    } catch (err) {
+      setStatus('error');
+      setErrorMessage(
+        err instanceof Error ? err.message : 'Unable to send message right now'
+      );
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -25,7 +64,7 @@ export default function ContactModal({ isOpen, onClose }: Props) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onClose}
+          onClick={handleClose}
         >
           <motion.div
             className="bg-[#11111a] rounded-xl shadow-2xl max-w-lg w-full p-6 text-white relative"
@@ -37,10 +76,18 @@ export default function ContactModal({ isOpen, onClose }: Props) {
           >
             {/* Icons */}
             <div className="flex justify-center gap-6 mb-4 text-2xl text-indigo-400">
-              <a href="https://linkedin.com/in/krutinpolra1444" target="_blank">
+              <a
+                href="https://linkedin.com/in/krutinpolra1444"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FaLinkedin />
               </a>
-              <a href="https://github.com/krutinpolra" target="_blank">
+              <a
+                href="https://github.com/krutinpolra"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <FaGithub />
               </a>
             </div>
@@ -62,20 +109,13 @@ export default function ContactModal({ isOpen, onClose }: Props) {
               Or send a message
             </div>
             <form
-              onSubmit={async e => {
-                e.preventDefault();
-                await fetch('/api/send-email', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(formData),
-                });
-                onClose();
-              }}
+              onSubmit={handleSubmit}
               className="flex flex-col gap-3"
             >
               <input
                 type="text"
                 required
+                disabled={status === 'sending'}
                 placeholder="Your name"
                 className="bg-[#1b1b2a] p-3 rounded-lg outline-none"
                 value={formData.name}
@@ -86,6 +126,7 @@ export default function ContactModal({ isOpen, onClose }: Props) {
               <input
                 type="email"
                 required
+                disabled={status === 'sending'}
                 placeholder="Your email"
                 className="bg-[#1b1b2a] p-3 rounded-lg outline-none"
                 value={formData.email}
@@ -95,6 +136,7 @@ export default function ContactModal({ isOpen, onClose }: Props) {
               />
               <textarea
                 required
+                disabled={status === 'sending'}
                 placeholder="Your message"
                 className="bg-[#1b1b2a] p-3 rounded-lg h-24 outline-none"
                 value={formData.message}
@@ -104,10 +146,21 @@ export default function ContactModal({ isOpen, onClose }: Props) {
               />
               <button
                 type="submit"
-                className="bg-indigo-500 hover:bg-indigo-600 text-white py-3 rounded-lg font-medium"
+                disabled={status === 'sending'}
+                className="bg-indigo-500 hover:bg-indigo-600 disabled:bg-indigo-500/60 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium"
               >
-                Send Message
+                {status === 'sending' ? 'Sending...' : 'Send Message'}
               </button>
+              {status === 'sent' && (
+                <p className="text-sm text-emerald-300 text-center">
+                  Message sent successfully.
+                </p>
+              )}
+              {status === 'error' && (
+                <p className="text-sm text-red-300 text-center">
+                  {errorMessage}
+                </p>
+              )}
             </form>
           </motion.div>
         </motion.div>
