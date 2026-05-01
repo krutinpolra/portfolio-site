@@ -1,9 +1,7 @@
 import { Resend } from 'resend';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-type SendEmailResponse =
-  | { success: true }
-  | { error: string };
+type SendEmailResponse = { success: true } | { error: string };
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -40,11 +38,15 @@ export default async function handler(
   const message = getStringValue(req.body?.message);
 
   if (!name || !email || !message) {
-    return res.status(400).json({ error: 'Name, email, and message are required' });
+    return res
+      .status(400)
+      .json({ error: 'Name, email, and message are required' });
   }
 
   if (!emailPattern.test(email)) {
-    return res.status(400).json({ error: 'Please provide a valid email address' });
+    return res
+      .status(400)
+      .json({ error: 'Please provide a valid email address' });
   }
 
   const safeName = escapeHtml(name);
@@ -89,7 +91,7 @@ export default async function handler(
           <p style="margin-top: 32px; font-size: 14px; color: #94a3b8;">
             Talk soon,<br />
             Krutin<br />
-            <a href="https://krutin.dev" style="color: #c084fc;">https://krutin.dev</a>
+            <a href="https://krutin.com" style="color: #c084fc;">https://krutin.com</a>
           </p>
         </div>
       `,
