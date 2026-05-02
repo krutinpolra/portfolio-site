@@ -81,8 +81,16 @@ const values = [
 
 const carouselImages = [
   { src: profilePic, alt: 'Krutin Polra profile portrait', title: 'I Code' },
-  { src: profilePicAlt, alt: 'Krutin Polra professional portrait', title: 'I Game' },
-  { src: profilePic, alt: 'Krutin Polra developer portrait', title: 'I Travel' },
+  {
+    src: profilePicAlt,
+    alt: 'Krutin Polra professional portrait',
+    title: 'I explore virtual worlds',
+  },
+  {
+    src: profilePic,
+    alt: 'Krutin Polra developer portrait',
+    title: 'I Travel',
+  },
 ];
 
 export default function About() {
@@ -221,8 +229,8 @@ export default function About() {
             <p className="mt-4">
               I&apos;m friendly, detail-oriented, and comfortable working across
               product, design, and engineering conversations. My goal is simple:
-              build useful software that feels thoughtful to use and reliable
-              to maintain.
+              build useful software that feels thoughtful to use and reliable to
+              maintain.
             </p>
 
             <motion.div
