@@ -46,7 +46,7 @@ export default function ProjectDetail() {
   return (
     <section
       id="projectDetail"
-      className="min-h-screen px-6 py-24 flex flex-col-reverse lg:flex-row items-center justify-center gap-12 relative overflow-hidden"
+      className="min-h-screen px-6 pb-24 pt-36 lg:pt-40 flex flex-col-reverse lg:flex-row items-center justify-center gap-12 relative overflow-hidden"
       style={{
         background: `linear-gradient(135deg, hsl(${hueA}, 60%, 15%), hsl(${hueB}, 70%, 20%))`,
       }}
@@ -80,12 +80,14 @@ export default function ProjectDetail() {
         <button
           onClick={prevImage}
           className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white px-2 py-1 rounded-full z-10"
+          aria-label="Show previous project screenshot"
         >
           ‹
         </button>
         <button
           onClick={nextImage}
           className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white px-2 py-1 rounded-full z-10"
+          aria-label="Show next project screenshot"
         >
           ›
         </button>

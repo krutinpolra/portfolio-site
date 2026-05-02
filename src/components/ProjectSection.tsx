@@ -85,7 +85,7 @@ export default function ProjectSection() {
         layout
         transition={{ layout: { duration: 0.6, ease: 'easeInOut' } }}
       >
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {filteredProjects.map(project => (
             <motion.div key={project.title} layout>
               <ProjectCard {...project} />
