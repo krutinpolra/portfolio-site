@@ -29,6 +29,13 @@ import {
   SiVercel,
   SiSass,
   SiExpress,
+  SiSupabase,
+  SiLangchain,
+  SiOpenai,
+  SiOpencv,
+  SiPytorch,
+  SiScikitlearn,
+  SiTensorflow,
 } from 'react-icons/si';
 import dynamic from 'next/dynamic';
 const ParticleSnow = dynamic(
@@ -36,7 +43,14 @@ const ParticleSnow = dynamic(
   { ssr: false }
 );
 
-const categories = ['Frontend', 'Backend', 'Deployment', 'Database', 'Cloud'];
+const categories = [
+  'Frontend',
+  'Backend',
+  'Deployment',
+  'Database',
+  'Cloud',
+  'AI / Computer Vision',
+];
 
 const tech = [
   // Frontend
@@ -84,9 +98,53 @@ const tech = [
   // Database
   { name: 'MongoDB', icon: SiMongodb, color: '#4DB33D', category: 'Database' },
   { name: 'MySQL', icon: SiMysql, color: '#00758F', category: 'Database' },
+  {
+    name: 'Supabase',
+    icon: SiSupabase,
+    color: '#3ECF8E',
+    category: 'Database',
+  },
 
   // Cloud
   { name: 'AWS', icon: FaAws, color: '#FF9900', category: 'Cloud' },
+
+  // AI / ML
+  {
+    name: 'OpenAI',
+    icon: SiOpenai,
+    color: '#ffffff',
+    category: 'AI / Computer Vision',
+  },
+  {
+    name: 'LangChain',
+    icon: SiLangchain,
+    color: '#1c3c3c',
+    category: 'AI / Computer Vision',
+  },
+  {
+    name: 'TensorFlow',
+    icon: SiTensorflow,
+    color: '#FF6F00',
+    category: 'AI / Computer Vision',
+  },
+  {
+    name: 'PyTorch',
+    icon: SiPytorch,
+    color: '#EE4C2C',
+    category: 'AI / Computer Vision',
+  },
+  {
+    name: 'OpenCV',
+    icon: SiOpencv,
+    color: '#5C3EE8',
+    category: 'AI / Computer Vision',
+  },
+  {
+    name: 'scikit-learn',
+    icon: SiScikitlearn,
+    color: '#F7931E',
+    category: 'AI / Computer Vision',
+  },
 
   // Deployment
   { name: 'Git', icon: FaGitAlt, color: '#f14e32', category: 'Deployment' },
