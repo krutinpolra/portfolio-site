@@ -1,17 +1,21 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
+
 const navLinks = [
-  { name: 'Home', href: '/' },
-  { name: 'About', href: '#about' },
-  { name: 'Skills', href: '#techstack' },
-  { name: 'Projects', href: '#projectsection' },
+  { name: 'Home', href: '/', sectionId: 'hero' },
+  { name: 'About', href: '#about', sectionId: 'about' },
+  { name: 'Experience', href: '#experience', sectionId: 'experience' },
+  { name: 'Skills', href: '#techstack', sectionId: 'techstack' },
+  { name: 'Projects', href: '#projectsection', sectionId: 'projectsection' },
   { name: 'Resume', href: '/resume.pdf', external: true },
-  { name: 'Contact', href: '#contact' },
+  { name: 'Contact', href: '#contact', modal: true },
 ];
+
+const sectionLinks = navLinks.filter((link) => link.sectionId);
+
 type NavbarProps = {
   onOpenContact: () => void;
 };
@@ -19,8 +23,10 @@ type NavbarProps = {
 export default function Navbar({ onOpenContact }: NavbarProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [showNav, setShowNav] = useState(true);
+  const [activeHref, setActiveHref] = useState('/');
+  const lastScrollY = useRef(0);
+  const scrollFrame = useRef<number | null>(null);
 
   useEffect(() => {
     const contentEl = document.getElementById('page-content');
@@ -30,48 +36,148 @@ export default function Navbar({ onOpenContact }: NavbarProps) {
   }, [menuOpen]);
 
   useEffect(() => {
+    if (pathname !== '/') {
+      setActiveHref('');
+      return;
+    }
+
+    const initialHash = window.location.hash;
+    if (initialHash === '#contact') {
+      setActiveHref('#contact');
+      onOpenContact();
+      return;
+    }
+
+    const initialLink = sectionLinks.find(
+      (link) => link.href === initialHash || (!initialHash && link.href === '/')
+    );
+    setActiveHref(initialLink?.href ?? '/');
+  }, [onOpenContact, pathname]);
+
+  useEffect(() => {
+    if (pathname !== '/') return;
+
     const handleScroll = () => {
       const currentScroll = window.scrollY;
+      setShowNav(!(currentScroll > lastScrollY.current && currentScroll > 100));
+      lastScrollY.current = currentScroll;
 
-      if (currentScroll > lastScrollY && currentScroll > 100) {
-        setShowNav(false); // Scroll Down → Hide
-      } else {
-        setShowNav(true); // Scroll Up → Show
+      if (scrollFrame.current !== null) {
+        return;
       }
 
-      setLastScrollY(currentScroll);
+      scrollFrame.current = window.requestAnimationFrame(() => {
+        const currentSection = sectionLinks.reduce((active, link) => {
+          if (!link.sectionId) return active;
+
+          const section = document.getElementById(link.sectionId);
+          if (!section) return active;
+
+          const scrollPosition = window.scrollY + window.innerHeight * 0.35;
+          return scrollPosition >= section.offsetTop ? link : active;
+        }, sectionLinks[0]);
+
+        if (currentSection) {
+          setActiveHref(currentSection.href);
+
+          const nextUrl =
+            currentSection.href === '/'
+              ? window.location.pathname
+              : `${window.location.pathname}${currentSection.href}`;
+          const currentUrl = `${window.location.pathname}${window.location.hash}`;
+
+          if (currentUrl !== nextUrl) {
+            window.history.replaceState(null, '', nextUrl);
+          }
+        }
+
+        scrollFrame.current = null;
+      });
     };
 
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [lastScrollY]);
+    handleScroll();
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scrollFrame.current !== null) {
+        window.cancelAnimationFrame(scrollFrame.current);
+      }
+    };
+  }, [pathname]);
+
+  const handleSectionClick = (
+    event: MouseEvent<HTMLAnchorElement>,
+    href: string,
+    sectionId?: string
+  ) => {
+    if (!sectionId) return;
+
+    event.preventDefault();
+    setMenuOpen(false);
+
+    if (pathname !== '/') {
+      window.location.href = href === '/' ? '/' : `/${href}`;
+      return;
+    }
+
+    const section = document.getElementById(sectionId);
+    if (!section) return;
+
+    setActiveHref(href);
+    window.history.pushState(
+      null,
+      '',
+      href === '/' ? window.location.pathname : `${window.location.pathname}${href}`
+    );
+
+    if (href === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const handleContactClick = () => {
+    setMenuOpen(false);
+    setActiveHref('#contact');
+    window.history.pushState(null, '', '#contact');
+    onOpenContact();
+  };
+
+  const getLinkClassName = (href: string) =>
+    `px-4 py-1.5 rounded-full transition-all duration-200 ${
+      activeHref === href
+        ? 'text-indigo-300 ring-1 ring-indigo-400/40 bg-white/5'
+        : 'hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40'
+    }`;
+
+  const getMobileLinkClassName = (href: string) =>
+    `block transition ${
+      activeHref === href ? 'text-indigo-400' : 'text-white hover:text-indigo-400'
+    }`;
 
   return (
     <header className="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 w-full px-4">
       <nav className="relative flex items-center justify-between max-w-6xl mx-auto">
-        {/* Logo */}
         <h1 className="text-lg font-bold text-indigo-400">Krutin.dev</h1>
 
-        {/* Desktop Pill Nav */}
         <div className="hidden md:flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
           <motion.ul
             animate={{ y: showNav ? 0 : -120 }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="flex space-x-2 items-center text-sm font-medium text-white dark:text-gray-200 px-4 py-2 bg-black/40 dark:bg-white/10 border border-white/10 shadow-xl backdrop-blur-md rounded-full"
           >
-            {navLinks.map(({ name, href, external }) => (
+            {navLinks.map(({ name, href, external, modal, sectionId }) => (
               <motion.li
                 key={name}
                 className="relative"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                {name === 'Contact' ? (
-                  <button
-                    onClick={onOpenContact}
-                    className={`px-4 py-1.5 rounded-full transition-all duration-200
-                                hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40`}
-                  >
+                {modal ? (
+                  <button onClick={handleContactClick} className={getLinkClassName(href)}>
                     {name}
                   </button>
                 ) : external ? (
@@ -79,30 +185,29 @@ export default function Navbar({ onOpenContact }: NavbarProps) {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`px-4 py-1.5 rounded-full transition-all duration-200
-                    ${pathname === href ? 'text-indigo-400 ring-1 ring-indigo-400/40' : 'hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40'}`}
+                    className="px-4 py-1.5 rounded-full transition-all duration-200 hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40"
                   >
                     {name}
                   </a>
                 ) : (
-                  <Link
+                  <a
                     href={href}
-                    className={`px-4 py-1.5 rounded-full transition-all duration-200
-                    ${pathname === href ? 'text-indigo-400 ring-1 ring-indigo-400/40' : 'hover:text-indigo-300 hover:ring-1 hover:ring-indigo-400/40'}`}
+                    onClick={(event) => handleSectionClick(event, href, sectionId)}
+                    className={getLinkClassName(href)}
                   >
                     {name}
-                  </Link>
+                  </a>
                 )}
               </motion.li>
             ))}
           </motion.ul>
         </div>
 
-        {/* Mobile Hamburger Button */}
         <div className="md:hidden z-50">
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="relative w-8 h-8 flex flex-col justify-between items-center"
+            aria-label="Toggle navigation"
           >
             <span
               className={`h-1 w-full bg-indigo-400 rounded transition-transform duration-300 ${
@@ -122,7 +227,6 @@ export default function Navbar({ onOpenContact }: NavbarProps) {
           </button>
         </div>
 
-        {/* Mobile Slide-In Navigation */}
         <AnimatePresence>
           {menuOpen && (
             <motion.ul
@@ -132,28 +236,33 @@ export default function Navbar({ onOpenContact }: NavbarProps) {
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
               className="md:hidden fixed top-0 right-0 w-full sm:w-3/4 max-h-fit bg-black dark:bg-zinc-900 shadow-lg p-6 pt-16 space-y-5 text-lg font-semibold z-40"
             >
-              {navLinks.map(({ name, href }) => (
+              {navLinks.map(({ name, href, external, modal, sectionId }) => (
                 <li key={name}>
-                  {name === 'Contact' ? (
+                  {modal ? (
                     <button
-                      onClick={() => {
-                        setMenuOpen(false);
-                        onOpenContact();
-                      }}
-                      className="block text-white hover:text-indigo-400 transition"
+                      onClick={handleContactClick}
+                      className={getMobileLinkClassName(href)}
                     >
                       {name}
                     </button>
-                  ) : (
-                    <Link
+                  ) : external ? (
+                    <a
                       href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={() => setMenuOpen(false)}
-                      className={`block hover:text-indigo-400 transition ${
-                        pathname === href ? 'text-indigo-400' : ''
-                      }`}
+                      className="block text-white hover:text-indigo-400 transition"
                     >
                       {name}
-                    </Link>
+                    </a>
+                  ) : (
+                    <a
+                      href={href}
+                      onClick={(event) => handleSectionClick(event, href, sectionId)}
+                      className={getMobileLinkClassName(href)}
+                    >
+                      {name}
+                    </a>
                   )}
                 </li>
               ))}
