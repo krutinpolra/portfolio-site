@@ -46,7 +46,7 @@ export default function ProjectDetail() {
   return (
     <section
       id="projectDetail"
-      className="min-h-screen px-6 py-24 flex flex-col-reverse lg:flex-row items-center gap-12 relative overflow-hidden"
+      className="min-h-screen px-6 py-24 flex flex-col-reverse lg:flex-row items-center justify-center gap-12 relative overflow-hidden"
       style={{
         background: `linear-gradient(135deg, hsl(${hueA}, 60%, 15%), hsl(${hueB}, 70%, 20%))`,
       }}
@@ -54,7 +54,7 @@ export default function ProjectDetail() {
       <ParticleSnow id="tsparticles-projectdetails" />
 
       {/* Animated Image Carousel */}
-      <div className="relative w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl group">
+      <div className="relative w-full max-w-2xl rounded-2xl overflow-hidden shadow-2xl group z-10">
         <AnimatePresence mode="wait">
           <motion.div
             key={index}
@@ -71,7 +71,7 @@ export default function ProjectDetail() {
               alt={`${project.title} screenshot ${index + 1}`}
               width={800}
               height={500}
-              className="object-cover rounded-2xl border border-white/10"
+              className="w-full object-cover rounded-2xl border border-white/10"
             />
           </motion.div>
         </AnimatePresence>
