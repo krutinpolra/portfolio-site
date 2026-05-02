@@ -10,8 +10,9 @@ import BrainStorming from '../assets/Animated-Icons/BrainStorming.json';
 import Communication from '../assets/Animated-Icons/Communication.json';
 import AttensionToDetails from '../assets/Animated-Icons/AttensionToDetails.json';
 import Growth from '../assets/Animated-Icons/Growth.json';
-import profilePic from '@/assets/images/profilepic2.jpg';
-import profilePicAlt from '@/assets/images/profilepic.jpeg';
+import profilePic from '@/assets/images/profilepic.jpeg';
+import profilePic2 from '@/assets/images/profilepic2.jpeg';
+import profilePic3 from '@/assets/images/profilepic3.jpeg';
 
 const Lottie = dynamic(() => import('lottie-react'), {
   ssr: false,
@@ -80,16 +81,23 @@ const values = [
 ];
 
 const carouselImages = [
-  { src: profilePic, alt: 'Krutin Polra profile portrait', title: 'I Code' },
-  {
-    src: profilePicAlt,
-    alt: 'Krutin Polra professional portrait',
-    title: 'I explore virtual worlds',
-  },
   {
     src: profilePic,
+    alt: 'Krutin Polra profile portrait',
+    title: 'I Code',
+    fit: 'cover',
+  },
+  {
+    src: profilePic2,
+    alt: 'Krutin Polra professional portrait',
+    title: 'I explore virtual worlds',
+    fit: 'contain',
+  },
+  {
+    src: profilePic3,
     alt: 'Krutin Polra developer portrait',
     title: 'I Travel',
+    fit: 'cover',
   },
 ];
 
@@ -168,7 +176,11 @@ export default function About() {
                       alt={image.alt}
                       fill
                       sizes="(max-width: 640px) 250px, 310px"
-                      className="object-cover rounded-[1.35rem] shadow-[0_28px_60px_rgba(0,0,0,0.55)]"
+                      className={`rounded-[1.35rem] bg-black/70 shadow-[0_28px_60px_rgba(0,0,0,0.55)] ${
+                        image.fit === 'contain'
+                          ? 'object-contain'
+                          : 'object-cover'
+                      }`}
                     />
                     <div className="absolute inset-0 rounded-[1.35rem] bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                   </motion.div>
