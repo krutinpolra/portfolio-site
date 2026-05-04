@@ -1,6 +1,7 @@
 // src/app/layout.tsx
 import '../styles/globals.css';
 import NavbarWrapper from '@/components/NavbarWrapper';
+import PortfolioChatbot from '@/components/PortfolioChatbot';
 import { Poppins } from 'next/font/google';
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '600', '700'] });
@@ -25,6 +26,7 @@ export default function RootLayout({
         >
           {children}
         </main>
+        <PortfolioChatbot />
       </body>
     </html>
   );

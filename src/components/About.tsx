@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import ContactModal from './contact';
 import CollaborationAnimation from '../assets/Animated-Icons/Collaboration.json';
 import BrainStorming from '../assets/Animated-Icons/BrainStorming.json';
 import Communication from '../assets/Animated-Icons/Communication.json';
@@ -19,6 +20,13 @@ const Lottie = dynamic(() => import('lottie-react'), {
 });
 const ParticleSnow = dynamic(
   () => import('@/assets/animatedComponent/ParticlesSnow'),
+  { ssr: false }
+);
+const TypeAnimation = dynamic(
+  async () => {
+    const { TypeAnimation } = await import('react-type-animation');
+    return TypeAnimation;
+  },
   { ssr: false }
 );
 
@@ -104,6 +112,7 @@ const carouselImages = [
 export default function About() {
   const [active, setActive] = useState(values[0]);
   const [activeImage, setActiveImage] = useState(0);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -115,12 +124,68 @@ export default function About() {
 
   return (
     <section
-      id="about"
-      className="relative overflow-hidden pb-20 min-h-screen py-24 px-6 text-white bg-gradient-to-b from-black via-[#0b0b1d] to-black"
+      id="hero"
+      className="relative overflow-hidden px-6 pb-20 text-white bg-gradient-to-b from-black via-[#0b0b1d] to-black"
     >
       <ParticleSnow id="tsparticles-about" />
+      <ContactModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
 
-      <div className="max-w-5xl mx-auto text-center relative z-10">
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center text-center">
+        <TypeAnimation
+          sequence={[
+            'I build AI-powered developer tools',
+            2000,
+            'I engineer secure full-stack products',
+            2000,
+            'I turn ideas into intelligent interfaces',
+            2000,
+          ]}
+          wrapper="h1"
+          className="max-w-4xl text-4xl font-extrabold leading-tight text-white md:text-6xl"
+          speed={60}
+          repeat={Infinity}
+        />
+
+        <motion.p
+          className="mt-6 max-w-2xl text-lg text-gray-300 md:text-xl"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+        >
+          Hi, I&apos;m <span className="font-semibold text-white">Krutin</span>,
+          a full-stack developer focused on applied AI engineering, secure web
+          apps, and product-ready cloud tools.
+        </motion.p>
+
+        <motion.div
+          className="mt-10 flex flex-wrap justify-center gap-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.6 }}
+        >
+          <button
+            onClick={() => setModalOpen(true)}
+            className="rounded-full bg-indigo-500 px-6 py-3 font-semibold text-white transition hover:bg-indigo-600"
+          >
+            Let&apos;s Connect
+          </button>
+        </motion.div>
+
+        <motion.a
+          href="#about"
+          className="absolute bottom-6 flex flex-col items-center text-sm text-white opacity-80"
+          animate={{ y: [0, -6, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        >
+          <span className="mb-1">scroll</span>
+          <span className="text-2xl">&darr;</span>
+        </motion.a>
+      </div>
+
+      <div
+        id="about"
+        className="relative z-10 mx-auto max-w-5xl scroll-mt-24 pt-16 text-center"
+      >
         <motion.h2
           className="text-4xl md:text-5xl font-bold mb-12 text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-500 to-fuchsia-400"
           initial={{ opacity: 0, y: 30 }}

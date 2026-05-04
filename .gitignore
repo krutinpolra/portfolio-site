@@ -32,6 +32,15 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# ai / rag local data
+.openai/
+.ai-cache/
+portfolio-knowledge/private/
+portfolio-knowledge/uploads/
+portfolio-knowledge/generated/
+portfolio-knowledge/**/*.local.md
 
 # vercel
 .vercel

@@ -41,7 +41,7 @@ export default function Experience() {
   return (
     <section
       id="experience"
-      className="relative overflow-hidden py-24 px-6 text-white bg-gradient-to-b from-black via-[#101024] to-[#141428]"
+      className="relative overflow-hidden py-24 px-6 text-white bg-gradient-to-b from-black via-[#0b0b1d] to-black"
     >
       <ParticleSnow id="tsparticles-experience" />
 

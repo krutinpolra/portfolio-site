@@ -164,7 +164,7 @@ export default function TechStack() {
   return (
     <section
       id="techstack"
-      className="relative overflow-hidden pb-20 py-24 px-6 text-white bg-gradient-to-b from-[#141428] via-[#1a1a30] to-black"
+      className="relative overflow-hidden pb-20 py-24 px-6 text-white bg-gradient-to-b from-black via-[#0b0b1d] to-black"
     >
       <ParticleSnow id="tsparticles-techStack" />
 
