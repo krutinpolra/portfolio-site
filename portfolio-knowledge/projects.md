@@ -1,187 +1,151 @@
-# Projects
+# Projects Overview
 
-## Krutin.dev Portfolio
+This file contains a high-level index of Krutin Polra’s projects.
 
-Slug: portfolio-krutin-dev
+The purpose of this file is to:
 
-Type: Personal portfolio website
+- Provide quick summaries of all projects
+- Help the chatbot identify relevant projects
+- Route deeper questions to detailed project files
 
-Description: A visually modern, responsive personal portfolio built with Next.js and Framer Motion to showcase projects, skills, experience, GitHub activity, and contact information.
+For detailed explanations, refer to individual project files in the `/projects` directory.
 
-Tech stack:
+---
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- Framer Motion
-- Vercel
-- tsParticles
+## Portfolio Website
 
-Links:
+**Slug:** portfolio-krutin-dev  
+**Type:** Personal portfolio website  
+**Detail File:** /projects/portfolio.md
 
-- Live: https://krutin.dev
-- GitHub: https://github.com/krutinpolra/portfolio-site
-- Documentation: https://github.com/krutinpolra/portfolio-site#readme
+### Summary
 
-Key points:
+A modern, animated portfolio showcasing projects, skills, experience, and contact workflows.
 
-- Smooth section transitions and entrance animations.
-- Project filtering and detail pages.
-- Responsive layout using Tailwind CSS.
-- Particle backgrounds for visual depth.
-- GitHub contribution section with live public GitHub data.
-- Contact form and portfolio chatbot UI.
+### Key Focus Areas
 
-Simple recruiter explanation:
+- UI/UX design and animations
+- Responsive layout
+- Project presentation and filtering
+- Chatbot integration
 
-This project shows Krutin's ability to design, build, and deploy a polished frontend application. It combines responsive UI, animation, routing, project data modeling, contact workflows, and production deployment.
+### Recruiter Insight
+
+Demonstrates frontend engineering, UI polish, and personal branding.
+
+---
 
 ## Fragments Microservice
 
-Slug: fragments-Microservice
+**Slug:** fragments-microservice  
+**Type:** Cloud-native backend API  
+**Detail File:** /projects/fragments.md
 
-Type: Cloud-native API
+### Summary
 
-Description: A cloud-native microservice for text and image fragment storage, format conversion, and secure user isolation using AWS services and modern DevOps practices.
+A secure microservice for storing and converting text and image fragments using AWS.
 
-Tech stack:
+### Key Focus Areas
 
-- Node.js
-- Express
-- AWS ECS
-- DynamoDB
-- S3
-- Cognito
-- Docker
-- GitHub Actions
-- Markdown-it
-- Sharp
+- API design
+- Cloud architecture
+- Authentication and storage
+- Format conversion
 
-Links:
+### Recruiter Insight
 
-- GitHub: https://github.com/krutinpolra/fragments
-- Documentation: https://github.com/krutinpolra/fragments#readme
+Demonstrates backend, cloud, and DevOps capabilities.
 
-Key points:
-
-- CRUD API for text, JSON, Markdown, HTML, CSV, and image formats.
-- Converts between formats such as Markdown to HTML and PNG to JPEG.
-- Uses AWS Cognito for user authentication.
-- Uses DynamoDB and S3 for persistent storage.
-- Dockerized with CI/CD workflows through GitHub Actions.
-- Includes integration and unit testing with strong coverage.
-
-Simple recruiter explanation:
-
-Fragments Microservice shows Krutin's backend and cloud skills. It is an API that accepts user content, stores it safely, converts it into other formats, and uses AWS services for authentication, storage, and deployment.
+---
 
 ## Hotel Reservation System
 
-Slug: hotel-reservation-system
+**Slug:** hotel-reservation-system  
+**Type:** Desktop application  
+**Detail File:** /projects/hotel.md
 
-Type: Desktop application
+### Summary
 
-Description: A JavaFX desktop application for managing hotel bookings, guest check-ins, room allocation, and reservation cancellation.
+A JavaFX application for managing hotel bookings and guest workflows.
 
-Tech stack:
+### Key Focus Areas
 
-- Java
-- JavaFX
-- SQLite
-- JDBC
+- Object-oriented design
 - MVC architecture
-- CSS
-- SceneBuilder
+- Database interaction
 
-Links:
+### Recruiter Insight
 
-- GitHub: https://github.com/krutinpolra/Application-Development-Workshops/tree/main/final%20project/HotelReservation
-- Documentation: https://github.com/krutinpolra/Application-Development-Workshops/tree/main/final%20project/HotelReservation#readme
-- Video walkthrough: https://github.com/krutinpolra/Application-Development-Workshops/tree/main/final%20project/video%20and%20reflaction
+Demonstrates strong OOP and system design fundamentals.
 
-Key points:
-
-- Room search, availability check, and booking flow.
-- Real-time guest check-in and check-out tracking.
-- Persistent storage using SQLite.
-- Clean MVC structure.
-- DAO pattern with JDBC.
-- Parameterized SQL queries for safer database operations.
-
-Simple recruiter explanation:
-
-This project shows Krutin's object-oriented programming and application architecture skills. It solves a real business workflow by organizing rooms, guests, and bookings in a maintainable Java application.
+---
 
 ## Culinary Parcel
 
-Slug: culinary-parcel
+**Slug:** culinary-parcel  
+**Type:** Full-stack web application  
+**Detail File:** /projects/culinary.md
 
-Type: Full-stack web app
+### Summary
 
-Description: A culinary subscription platform with meal kit listings, login, and an interactive user experience for food enthusiasts.
+A meal kit subscription platform with authentication and user interaction workflows.
 
-Tech stack:
+### Key Focus Areas
 
-- Node.js
-- Express.js
-- MongoDB
-- EJS
-- Bootstrap
-- Tailwind CSS
-- Sessions
+- Full-stack architecture
+- Session-based authentication
+- Database-driven UI
 
-Links:
+### Recruiter Insight
 
-- Live: https://web-322-kbpolra.vercel.app
-- GitHub: https://github.com/krutinpolra/WEB322-kbpolra
-- Documentation: https://github.com/krutinpolra/WEB322-kbpolra#readme
+Demonstrates traditional full-stack development skills.
 
-Key points:
-
-- Session-based authentication.
-- Dynamic meal kit listing with MongoDB.
-- Personalized user dashboard.
-- Modular routes, views, controllers, and public assets.
-- RESTful routes for listing, ordering, and user interaction.
-
-Simple recruiter explanation:
-
-Culinary Parcel shows Krutin's ability to build a traditional full-stack application with server-rendered pages, authentication, data persistence, and user workflows.
+---
 
 ## Met Museum Explorer
 
-Slug: met-museum-explorer
+**Slug:** met-museum-explorer  
+**Type:** API-driven web application  
+**Detail File:** /projects/met.md
 
-Type: API-driven web app
+### Summary
 
-Description: An interactive art exploration platform powered by the Metropolitan Museum of Art Collection API. Users can browse, search, and save favorite artworks.
+An interactive platform for exploring artwork using the Met Museum API.
 
-Tech stack:
+### Key Focus Areas
 
-- Next.js
-- React
-- Jotai
-- MongoDB
-- JWT
-- Bootstrap
-- Met Museum API
+- External API integration
+- State management
+- Authentication and personalization
 
-Links:
+### Recruiter Insight
 
-- Live: https://met-museum-wine.vercel.app
-- GitHub: https://github.com/krutinpolra/met-museum
-- Documentation: https://github.com/krutinpolra/met-museum#readme
+Demonstrates API usage, frontend architecture, and user experience design.
 
-Key points:
+---
 
-- Fetches and displays artwork data from the Met Museum Collection API.
-- Search and filtering with query parameters.
-- Favorites and recently viewed history.
-- Global state management using Jotai.
-- JWT-based authentication with MongoDB backend.
-- Dynamic routing using Next.js.
+## Project Selection Guidance (for Chatbot)
 
-Simple recruiter explanation:
+When answering user queries:
 
-Met Museum Explorer shows Krutin's ability to work with external APIs, state management, authentication, and user-centered browsing workflows.
+- Identify the most relevant project based on:
+
+  - Technology
+  - Problem domain
+  - User intent
+
+- If user asks:
+  - "Explain this project" → Use detailed project file
+  - "What projects has Krutin built?" → Use this overview
+  - "Best project?" → Prioritize:
+    1. Fragments Microservice
+    2. Portfolio Website
+    3. AI Tooling (if added later)
+
+---
+
+## Important Rules
+
+- Do not mix details from multiple projects unless explicitly asked
+- Do not invent features not listed
+- Always prefer detailed project files when available

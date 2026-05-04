@@ -1,24 +1,27 @@
 # Work Experience
 
+This section describes Krutin Polra’s professional and collaborative development experience.
+
+---
+
 ## Software Developer Co-op
 
-Organization: Ontario Ministry (MPBSDP)
+**Organization:** Ontario Ministry of Public and Business Service Delivery (MPBSDP)  
+**Location:** Toronto, ON  
+**Period:** May 2025 – December 2025  
+**Category:** Public Sector  
+**Platform:** My Benefits Platform  
+**URL:** https://mybenefits.mcss.gov.on.ca/auth/login
 
-Location: Toronto, ON
-
-Period: May 2025 - Dec 2025
-
-Category: Public Sector
-
-Platform: My Benefits Platform
-
-URL: https://mybenefits.mcss.gov.on.ca/auth/login
+---
 
 ## Summary
 
-Krutin worked on My Benefits, a large-scale Angular application serving Ontario residents with secure and accessible digital services.
+Krutin contributed to the My Benefits platform, a large-scale Angular application that provides secure and accessible digital services to Ontario residents.
 
-His work focused on improving secure UI components, API-connected screens, code quality, accessibility, and production readiness.
+His work focused on improving UI quality, strengthening API integrations, increasing test coverage, supporting security testing, and ensuring accessibility compliance in a production environment.
+
+---
 
 ## Technologies
 
@@ -31,26 +34,121 @@ His work focused on improving secure UI components, API-connected screens, code 
 - OWASP ZAP
 - CI/CD workflows
 
-## Highlights
+---
 
-- Contributed to secure UI components and API integrations for a public-sector web platform.
-- Resolved SonarQube issues and strengthened code quality across production workflows.
-- Supported OWASP ZAP testing, CI/CD delivery, and accessibility-focused design review.
-- Worked from detailed UI designs and requirements.
-- Validated implementation against functional, non-functional, and accessibility expectations.
+## Key Contributions
 
-## Metrics
+- Built and improved secure UI components integrated with backend APIs
+- Resolved SonarQube issues to improve code quality and maintainability
+- Supported OWASP ZAP security testing and vulnerability analysis
+- Participated in CI/CD workflows using Azure DevOps pipelines
+- Validated implementation against functional and non-functional requirements
+- Ensured accessibility compliance based on WCAG standards
+- Collaborated in Agile teams including stand-ups, sprint planning, and code reviews
 
-- 80 percent test coverage lift.
-- 25 percent maintainability gain.
-- 20 percent vulnerability reduction.
+---
+
+## Impact Metrics
+
+- Increased test coverage by approximately 80 percent
+- Improved maintainability by approximately 25 percent
+- Contributed to reducing vulnerabilities by approximately 20 percent
+
+---
 
 ## Why This Work Mattered
 
-Public-sector applications need to be reliable, accessible, and predictable for people who depend on them. Krutin's work was not only about shipping UI changes, but also improving quality, trustworthiness, accessibility, and maintainability.
+Public-sector applications require high reliability, accessibility, and security. Krutin’s work contributed to making the platform more trustworthy, maintainable, and accessible for users who depend on these services.
+
+This experience reflects his ability to work on production systems with real-world impact.
+
+---
 
 ## What Krutin Learned
 
-Krutin learned how much production engineering depends on small quality decisions: test coverage, clean error handling, accessibility, code review, and secure delivery practices.
+- Importance of clean, maintainable, and testable code
+- Real-world impact of accessibility and usability decisions
+- Secure development practices in production environments
+- CI/CD workflows and collaborative engineering processes
+- How small engineering decisions improve system reliability at scale
 
-This experience supports his interest in applied AI engineering because AI-powered tools still require strong product foundations: reliable interfaces, secure APIs, observable workflows, and accessible user experiences.
+This experience also strengthened his foundation for building AI-powered systems, where reliability, structured data, and strong backend integration are critical.
+
+---
+
+# Additional Experience
+
+## Junior Developer
+
+**Organization:** Seneca Software Developers Club (SSDC)  
+**Location:** Toronto, ON  
+**Period:** October 2024 – December 2024  
+**Category:** Academic / Collaborative Development
+
+---
+
+## Summary
+
+Krutin worked as a Junior Developer in a student-led development club where members collaborated to build projects, improve technical skills, and support peer learning.
+
+---
+
+## Responsibilities
+
+- Collaborated with a team of students to build and improve web-based projects
+- Assisted other students in understanding programming concepts and debugging issues
+- Participated in building websites and tools using modern web technologies
+- Supported workshops and learning sessions focused on React, TypeScript, and API integration
+
+---
+
+## Technologies Used
+
+- TypeScript
+- JavaScript
+- React
+- CSS
+- REST APIs
+- MongoDB
+- MySQL
+
+---
+
+## Impact
+
+- Contributed to multiple feature updates across club projects
+- Helped improve learning outcomes for peers through mentorship and collaboration
+- Supported technical workshops that increased student engagement
+
+---
+
+## Why This Experience Matters
+
+This experience demonstrates:
+
+- Collaboration in team environments
+- Communication of technical concepts
+- Ability to support and guide others
+- Practical application of development skills in real projects
+
+---
+
+## What Krutin Learned
+
+- How to explain technical concepts clearly
+- Importance of teamwork and communication
+- Working in collaborative development environments
+- Building confidence in real-world coding scenarios
+
+---
+
+## Recruiter Summary
+
+Krutin has both production-level experience and collaborative development experience.
+
+- He has worked on a large-scale government application with real users
+- He has experience improving code quality, security, and accessibility
+- He has collaborated in Agile teams and CI/CD workflows
+- He has also mentored peers and contributed to team-based projects
+
+This combination makes him a well-rounded candidate with both technical and communication strengths.
