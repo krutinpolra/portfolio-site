@@ -180,7 +180,7 @@ Respond with this exact structure:
 
 ### Best Ways to Contact Krutin
 
-- [Portfolio contact form](https://www.krutinpolra.com/#contact) - best option for direct messages
+- [Portfolio contact form](#contact) - best option for direct messages
 - [LinkedIn](https://www.linkedin.com/in/krutinpolra1444/) - best option for recruiter outreach
 - [Resume](https://www.krutinpolra.com/resume.pdf) - use when resume context is needed
 - [GitHub](https://github.com/krutinpolra) - use for technical/project context

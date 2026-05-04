@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import type { FormEvent, ReactNode } from 'react';
+import type { FormEvent, MouseEvent, ReactNode } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   FaPaperPlane,
@@ -89,18 +89,82 @@ function useDesktopSidebar() {
   return isDesktopSidebar;
 }
 
+function getInternalPortfolioHash(href: string) {
+  if (href.startsWith('#')) return href;
+
+  try {
+    const knownPortfolioUrl = new URL(href);
+    const isKnownPortfolioHash =
+      (knownPortfolioUrl.origin === 'https://www.krutinpolra.com' ||
+        knownPortfolioUrl.origin === 'https://krutinpolra.com') &&
+      Boolean(knownPortfolioUrl.hash);
+
+    if (isKnownPortfolioHash) {
+      return knownPortfolioUrl.hash;
+    }
+
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
+    const url = new URL(href, window.location.origin);
+    const isCurrentSite = url.origin === window.location.origin;
+
+    if (isCurrentSite && url.hash) {
+      return url.hash;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
+}
+
+function handleMarkdownLinkClick(
+  event: MouseEvent<HTMLAnchorElement>,
+  href: string
+) {
+  const hash = getInternalPortfolioHash(href);
+  if (!hash) return;
+
+  event.preventDefault();
+  window.history.pushState(null, '', hash);
+
+  if (hash === '#contact') {
+    window.dispatchEvent(new CustomEvent('open-contact-modal'));
+    window.dispatchEvent(new CustomEvent('close-portfolio-chat'));
+    return;
+  }
+
+  document.querySelector(hash)?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+  });
+  window.dispatchEvent(new CustomEvent('close-portfolio-chat'));
+}
+
+function shouldOpenInNewTab(href: string) {
+  return !href.startsWith('mailto:') && !getInternalPortfolioHash(href);
+}
+
 function renderInlineMarkdown(text: string) {
   return text
-    .split(/(\[[^\]]+\]\((?:https?:\/\/|mailto:)[^)]+\)|\*\*[^*]+\*\*|`[^`]+`)/g)
+    .split(/(\[[^\]]+\]\((?:(?:https?:\/\/|mailto:)[^)]+|#[^)]+)\)|\*\*[^*]+\*\*|`[^`]+`)/g)
     .map((part, index) => {
-      const link = part.match(/^\[([^\]]+)\]\(((?:https?:\/\/|mailto:)[^)]+)\)$/);
+      const link = part.match(
+        /^\[([^\]]+)\]\(((?:https?:\/\/|mailto:)[^)]+|#[^)]+)\)$/
+      );
       if (link) {
+        const href = link[2];
+        const openInNewTab = shouldOpenInNewTab(href);
+
         return (
           <a
             key={`${part}-${index}`}
-            href={link[2]}
-            target={link[2].startsWith('mailto:') ? undefined : '_blank'}
-            rel={link[2].startsWith('mailto:') ? undefined : 'noreferrer'}
+            href={href}
+            target={openInNewTab ? '_blank' : undefined}
+            rel={openInNewTab ? 'noreferrer' : undefined}
+            onClick={event => handleMarkdownLinkClick(event, href)}
             className="font-semibold text-indigo-200 underline decoration-indigo-300/50 underline-offset-4 transition hover:text-white"
           >
             {link[1]}
@@ -338,6 +402,14 @@ export default function PortfolioChatbot() {
     window.addEventListener('hashchange', handleHashOpen);
 
     return () => window.removeEventListener('hashchange', handleHashOpen);
+  }, []);
+
+  useEffect(() => {
+    const handleCloseChat = () => setIsOpen(false);
+
+    window.addEventListener('close-portfolio-chat', handleCloseChat);
+    return () =>
+      window.removeEventListener('close-portfolio-chat', handleCloseChat);
   }, []);
 
   useEffect(() => {
