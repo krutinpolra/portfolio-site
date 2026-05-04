@@ -90,28 +90,45 @@ function useDesktopSidebar() {
 }
 
 function renderInlineMarkdown(text: string) {
-  return text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, index) => {
-    if (part.startsWith('**') && part.endsWith('**')) {
-      return (
-        <strong key={`${part}-${index}`} className="font-semibold text-white">
-          {part.slice(2, -2)}
-        </strong>
-      );
-    }
+  return text
+    .split(/(\[[^\]]+\]\((?:https?:\/\/|mailto:)[^)]+\)|\*\*[^*]+\*\*|`[^`]+`)/g)
+    .map((part, index) => {
+      const link = part.match(/^\[([^\]]+)\]\(((?:https?:\/\/|mailto:)[^)]+)\)$/);
+      if (link) {
+        return (
+          <a
+            key={`${part}-${index}`}
+            href={link[2]}
+            target={link[2].startsWith('mailto:') ? undefined : '_blank'}
+            rel={link[2].startsWith('mailto:') ? undefined : 'noreferrer'}
+            className="font-semibold text-indigo-200 underline decoration-indigo-300/50 underline-offset-4 transition hover:text-white"
+          >
+            {link[1]}
+          </a>
+        );
+      }
 
-    if (part.startsWith('`') && part.endsWith('`')) {
-      return (
-        <code
-          key={`${part}-${index}`}
-          className="rounded bg-black/30 px-1.5 py-0.5 text-[0.92em] text-indigo-100"
-        >
-          {part.slice(1, -1)}
-        </code>
-      );
-    }
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return (
+          <strong key={`${part}-${index}`} className="font-semibold text-white">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
 
-    return part;
-  });
+      if (part.startsWith('`') && part.endsWith('`')) {
+        return (
+          <code
+            key={`${part}-${index}`}
+            className="rounded bg-black/30 px-1.5 py-0.5 text-[0.92em] text-indigo-100"
+          >
+            {part.slice(1, -1)}
+          </code>
+        );
+      }
+
+      return part;
+    });
 }
 
 function MarkdownMessage({ content }: { content: string }) {
