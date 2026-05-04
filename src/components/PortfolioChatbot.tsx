@@ -173,7 +173,7 @@ function MarkdownMessage({ content }: { content: string }) {
       return;
     }
 
-    const heading = trimmedLine.match(/^(#{1,3})\s+(.+)$/);
+    const heading = trimmedLine.match(/^(#{1,6})\s+(.+)$/);
     if (heading) {
       flushLists();
       elements.push(
