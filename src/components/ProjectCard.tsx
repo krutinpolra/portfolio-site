@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import type { Variants } from 'motion/react';
 import Image from 'next/image';
@@ -23,6 +24,26 @@ const cardVariants: Variants = {
   },
 };
 
+function useScrollTriggeredCards() {
+  const [isScrollTriggered, setIsScrollTriggered] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(hover: none), (pointer: coarse)');
+    const updateInputMode = () => setIsScrollTriggered(mediaQuery.matches);
+
+    updateInputMode();
+    mediaQuery.addEventListener('change', updateInputMode);
+
+    return () => mediaQuery.removeEventListener('change', updateInputMode);
+  }, []);
+
+  return isScrollTriggered;
+}
+
+type ProjectCardProps = Project & {
+  isMobileActive?: boolean;
+};
+
 export default function ProjectCard({
   title,
   description,
@@ -31,15 +52,24 @@ export default function ProjectCard({
   hueA,
   hueB,
   slug,
-}: Project) {
+  isMobileActive = false,
+}: ProjectCardProps) {
+  const isScrollTriggered = useScrollTriggeredCards();
+
   return (
     <div className="relative flex flex-col items-center">
       <Link href={`/projects/${slug}`} className="group relative block w-full">
         <motion.div
           className="project-card-container"
           initial="offscreen"
-          whileHover="onscreen"
-          viewport={{ amount: 0.8, once: true }}
+          animate={
+            isScrollTriggered
+              ? isMobileActive
+                ? 'onscreen'
+                : 'offscreen'
+              : undefined
+          }
+          whileHover={isScrollTriggered ? undefined : 'onscreen'}
           transition={{ type: 'spring', stiffness: 220 }}
         >
           <div
@@ -69,9 +99,9 @@ export default function ProjectCard({
                 {title}
               </h3>
 
-            <p className="text-sm text-gray-400 mb-4 leading-relaxed transition-opacity duration-300 group-hover:opacity-100 line-clamp-3">
-              {description}
-            </p>
+              <p className="text-sm text-gray-400 mb-4 leading-relaxed transition-opacity duration-300 group-hover:opacity-100 line-clamp-3">
+                {description}
+              </p>
 
               <div className="flex flex-wrap justify-center gap-2 mb-4">
                 {techStack.map(tech => (

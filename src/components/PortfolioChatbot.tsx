@@ -1,6 +1,12 @@
 'use client';
 
-import { FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
+import type { FormEvent, ReactNode } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   FaPaperPlane,
@@ -52,7 +58,7 @@ const initialMessages: ChatMessage[] = [
     id: 'welcome',
     role: 'assistant',
     content:
-      "Hi, I'm Krutin's portfolio assistant. Ask me about his projects, experience, skills, or resume.",
+      "Hi, I'm Krutin's portfolio assistant.\n\n- Ask about projects, experience, skills, or resume.\n- Open a project explainer for a structured recruiter-friendly summary.",
   },
 ];
 
@@ -65,6 +71,130 @@ function formatEstimatedCost(cost: number) {
   if (cost < 0.000001) return '<$0.000001';
 
   return `$${cost.toFixed(6)}`;
+}
+
+function useDesktopSidebar() {
+  const [isDesktopSidebar, setIsDesktopSidebar] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 1024px)');
+    const updateLayoutMode = () => setIsDesktopSidebar(mediaQuery.matches);
+
+    updateLayoutMode();
+    mediaQuery.addEventListener('change', updateLayoutMode);
+
+    return () => mediaQuery.removeEventListener('change', updateLayoutMode);
+  }, []);
+
+  return isDesktopSidebar;
+}
+
+function renderInlineMarkdown(text: string) {
+  return text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, index) => {
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return (
+        <strong key={`${part}-${index}`} className="font-semibold text-white">
+          {part.slice(2, -2)}
+        </strong>
+      );
+    }
+
+    if (part.startsWith('`') && part.endsWith('`')) {
+      return (
+        <code
+          key={`${part}-${index}`}
+          className="rounded bg-black/30 px-1.5 py-0.5 text-[0.92em] text-indigo-100"
+        >
+          {part.slice(1, -1)}
+        </code>
+      );
+    }
+
+    return part;
+  });
+}
+
+function MarkdownMessage({ content }: { content: string }) {
+  const lines = content.split(/\r?\n/);
+  const elements: ReactNode[] = [];
+  let listItems: string[] = [];
+  let orderedListItems: string[] = [];
+
+  const flushLists = () => {
+    if (listItems.length > 0) {
+      elements.push(
+        <ul key={`ul-${elements.length}`} className="my-2 space-y-1 pl-4">
+          {listItems.map((item, index) => (
+            <li key={`${item}-${index}`} className="list-disc">
+              {renderInlineMarkdown(item)}
+            </li>
+          ))}
+        </ul>
+      );
+      listItems = [];
+    }
+
+    if (orderedListItems.length > 0) {
+      elements.push(
+        <ol key={`ol-${elements.length}`} className="my-2 space-y-1 pl-4">
+          {orderedListItems.map((item, index) => (
+            <li key={`${item}-${index}`} className="list-decimal">
+              {renderInlineMarkdown(item)}
+            </li>
+          ))}
+        </ol>
+      );
+      orderedListItems = [];
+    }
+  };
+
+  lines.forEach((line, index) => {
+    const trimmedLine = line.trim();
+
+    if (!trimmedLine) {
+      flushLists();
+      return;
+    }
+
+    const heading = trimmedLine.match(/^(#{1,3})\s+(.+)$/);
+    if (heading) {
+      flushLists();
+      elements.push(
+        <h3
+          key={`heading-${index}`}
+          className="mb-1 mt-3 text-sm font-bold text-indigo-200 first:mt-0"
+        >
+          {renderInlineMarkdown(heading[2])}
+        </h3>
+      );
+      return;
+    }
+
+    const bullet = trimmedLine.match(/^[-*]\s+(.+)$/);
+    if (bullet) {
+      orderedListItems = [];
+      listItems.push(bullet[1]);
+      return;
+    }
+
+    const numbered = trimmedLine.match(/^\d+\.\s+(.+)$/);
+    if (numbered) {
+      listItems = [];
+      orderedListItems.push(numbered[1]);
+      return;
+    }
+
+    flushLists();
+    elements.push(
+      <p key={`p-${index}`} className="my-2 first:mt-0 last:mb-0">
+        {renderInlineMarkdown(trimmedLine)}
+      </p>
+    );
+  });
+
+  flushLists();
+
+  return <div>{elements}</div>;
 }
 
 export function openPortfolioChat(projectTitle: string) {
@@ -86,6 +216,7 @@ export default function PortfolioChatbot() {
   const [isSending, setIsSending] = useState(false);
   const [sessionCost, setSessionCost] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const isDesktopSidebar = useDesktopSidebar();
 
   const sendMessage = useCallback(async (message: string) => {
     const trimmedMessage = message.trim();
@@ -180,6 +311,31 @@ export default function PortfolioChatbot() {
   }, [sendMessage]);
 
   useEffect(() => {
+    const handleHashOpen = () => {
+      if (window.location.hash === '#chat') {
+        setIsOpen(true);
+      }
+    };
+
+    handleHashOpen();
+    window.addEventListener('hashchange', handleHashOpen);
+
+    return () => window.removeEventListener('hashchange', handleHashOpen);
+  }, []);
+
+  useEffect(() => {
+    const pageContent = document.getElementById('page-content');
+    if (!pageContent) return;
+
+    pageContent.style.marginRight =
+      isOpen && isDesktopSidebar ? '440px' : '0px';
+
+    return () => {
+      pageContent.style.marginRight = '0px';
+    };
+  }, [isDesktopSidebar, isOpen]);
+
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isOpen]);
 
@@ -193,7 +349,12 @@ export default function PortfolioChatbot() {
     <>
       <motion.button
         type="button"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          if (window.location.hash !== '#chat') {
+            window.history.pushState(null, '', '#chat');
+          }
+        }}
         className="fixed bottom-6 right-6 z-[60] grid h-14 w-14 place-items-center rounded-full border border-indigo-400/40 bg-[#11111a]/95 text-indigo-300 shadow-[0_0_24px_rgba(99,102,241,0.55)] backdrop-blur-md transition hover:text-white"
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
@@ -205,11 +366,23 @@ export default function PortfolioChatbot() {
       <AnimatePresence>
         {isOpen && (
           <motion.aside
-            initial={{ opacity: 0, y: 24, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 24, scale: 0.96 }}
+            initial={
+              isDesktopSidebar
+                ? { opacity: 0, x: 80 }
+                : { opacity: 0, y: 24, scale: 0.96 }
+            }
+            animate={
+              isDesktopSidebar
+                ? { opacity: 1, x: 0 }
+                : { opacity: 1, y: 0, scale: 1 }
+            }
+            exit={
+              isDesktopSidebar
+                ? { opacity: 0, x: 80 }
+                : { opacity: 0, y: 24, scale: 0.96 }
+            }
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed bottom-24 right-4 z-[70] flex h-[min(680px,calc(100vh-8rem))] w-[calc(100vw-2rem)] max-w-[420px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0b0b1d]/95 text-white shadow-2xl backdrop-blur-xl sm:right-6"
+            className="fixed bottom-24 right-4 z-[70] flex h-[min(680px,calc(100vh-8rem))] w-[calc(100vw-2rem)] max-w-[420px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0b0b1d]/95 text-white shadow-2xl backdrop-blur-xl sm:right-6 lg:bottom-0 lg:right-0 lg:h-screen lg:w-[440px] lg:max-w-none lg:rounded-none lg:border-y-0 lg:border-r-0"
           >
             <div className="border-b border-white/10 bg-white/10 p-4">
               <div className="flex items-start justify-between gap-4">
@@ -232,7 +405,12 @@ export default function PortfolioChatbot() {
 
                 <button
                   type="button"
-                  onClick={() => setIsOpen(false)}
+                  onClick={() => {
+                    setIsOpen(false);
+                    if (window.location.hash === '#chat') {
+                      window.history.pushState(null, '', window.location.pathname);
+                    }
+                  }}
                   className="rounded-full p-2 text-gray-300 transition hover:bg-white/10 hover:text-white"
                   aria-label="Close portfolio chatbot"
                 >
@@ -275,14 +453,18 @@ export default function PortfolioChatbot() {
                         : 'border border-white/10 bg-white/10 text-gray-200'
                     }`}
                   >
-                    {message.content}
+                    {message.role === 'assistant' ? (
+                      <MarkdownMessage content={message.content} />
+                    ) : (
+                      <p className="whitespace-pre-wrap">{message.content}</p>
+                    )}
                     {message.role === 'assistant' &&
                       message.costUsd !== undefined &&
                       message.totalTokens !== undefined && (
                         <p className="mt-3 border-t border-white/10 pt-2 text-[11px] leading-none text-indigo-200/75">
-                          Est. {formatEstimatedCost(message.costUsd)} ·{' '}
+                          Est. {formatEstimatedCost(message.costUsd)} |{' '}
                           {message.totalTokens} tokens
-                          {message.model ? ` · ${message.model}` : ''}
+                          {message.model ? ` | ${message.model}` : ''}
                         </p>
                       )}
                   </div>
@@ -305,6 +487,12 @@ export default function PortfolioChatbot() {
                 <textarea
                   value={input}
                   onChange={event => setInput(event.target.value)}
+                  onKeyDown={event => {
+                    if (event.key === 'Enter' && !event.shiftKey) {
+                      event.preventDefault();
+                      event.currentTarget.form?.requestSubmit();
+                    }
+                  }}
                   placeholder="Ask about Krutin..."
                   rows={1}
                   disabled={isSending}

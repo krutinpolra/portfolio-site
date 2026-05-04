@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectCard from './ProjectCard';
 import { projects } from '@/model/Project.data';
@@ -20,22 +20,106 @@ const allCategories = [
   'Hackathons',
 ];
 
+function useScrollTriggeredCards() {
+  const [isScrollTriggered, setIsScrollTriggered] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(hover: none), (pointer: coarse)');
+    const updateInputMode = () => setIsScrollTriggered(mediaQuery.matches);
+
+    updateInputMode();
+    mediaQuery.addEventListener('change', updateInputMode);
+
+    return () => mediaQuery.removeEventListener('change', updateInputMode);
+  }, []);
+
+  return isScrollTriggered;
+}
+
 export default function ProjectSection() {
   const [selected, setSelected] = useState('All');
+  const [activeMobileProject, setActiveMobileProject] = useState<string | null>(
+    null
+  );
+  const projectRefs = useRef(new Map<string, HTMLDivElement>());
+  const isScrollTriggered = useScrollTriggeredCards();
 
-  const filteredProjects =
-    selected === 'All'
-      ? projects
-      : projects.filter(p =>
-          p.Category.some(stack =>
-            stack.toLowerCase().includes(selected.toLowerCase())
-          )
-        );
+  const filteredProjects = useMemo(
+    () =>
+      selected === 'All'
+        ? projects
+        : projects.filter(p =>
+            p.Category.some(stack =>
+              stack.toLowerCase().includes(selected.toLowerCase())
+            )
+          ),
+    [selected]
+  );
+
+  useEffect(() => {
+    if (!isScrollTriggered) {
+      setActiveMobileProject(null);
+      return;
+    }
+
+    let frameId: number | null = null;
+
+    const updateActiveProject = () => {
+      const viewportCenter = window.innerHeight * 0.52;
+      let nextActiveProject: string | null = null;
+      let closestDistance = Number.POSITIVE_INFINITY;
+
+      filteredProjects.forEach(project => {
+        const element = projectRefs.current.get(project.slug);
+        if (!element) return;
+
+        const rect = element.getBoundingClientRect();
+        const visibleTop = Math.max(rect.top, 0);
+        const visibleBottom = Math.min(rect.bottom, window.innerHeight);
+
+        if (visibleBottom <= visibleTop) return;
+
+        const cardCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(cardCenter - viewportCenter);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          nextActiveProject = project.slug;
+        }
+      });
+
+      setActiveMobileProject(current =>
+        current === nextActiveProject ? current : nextActiveProject
+      );
+    };
+
+    const scheduleUpdate = () => {
+      if (frameId !== null) return;
+
+      frameId = window.requestAnimationFrame(() => {
+        frameId = null;
+        updateActiveProject();
+      });
+    };
+
+    updateActiveProject();
+    window.addEventListener('scroll', scheduleUpdate, { passive: true });
+    window.addEventListener('resize', scheduleUpdate);
+
+    return () => {
+      if (frameId !== null) {
+        window.cancelAnimationFrame(frameId);
+      }
+
+      window.removeEventListener('scroll', scheduleUpdate);
+      window.removeEventListener('resize', scheduleUpdate);
+    };
+  }, [filteredProjects, isScrollTriggered]);
 
   return (
     <section
       id="projectsection"
-      className="relative overflow-hidden pb-20 min-h-screen py-24 px-6 text-white bg-gradient-to-b from-black via-[#0b0b1d] to-[#141428]"
+      className="relative overflow-hidden pb-20 min-h-screen py-24 px-6 text-white bg-gradient-to-b from-black via-[#0b0b1d] to-black"
     >
       <ParticleSnow id="tsparticles-projects" />
 
@@ -87,8 +171,21 @@ export default function ProjectSection() {
       >
         <AnimatePresence>
           {filteredProjects.map(project => (
-            <motion.div key={project.title} layout>
-              <ProjectCard {...project} />
+            <motion.div
+              key={project.slug}
+              ref={element => {
+                if (element) {
+                  projectRefs.current.set(project.slug, element);
+                } else {
+                  projectRefs.current.delete(project.slug);
+                }
+              }}
+              layout
+            >
+              <ProjectCard
+                {...project}
+                isMobileActive={activeMobileProject === project.slug}
+              />
             </motion.div>
           ))}
         </AnimatePresence>
