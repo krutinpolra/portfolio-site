@@ -2,6 +2,9 @@ import { notFound } from 'next/navigation';
 import ProjectDetailView from '@/components/ProjectDetailView';
 import { getPortfolioProjectDetail } from '@/lib/supabasePortfolio';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type ProjectDetailPageProps = {
   params: Promise<{
     slug: string;

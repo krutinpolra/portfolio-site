@@ -2,6 +2,9 @@ import { notFound } from 'next/navigation';
 import ExperienceDetailView from '@/components/ExperienceDetailView';
 import { getPortfolioExperienceDetail } from '@/lib/supabasePortfolio';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 type ExperienceDetailPageProps = {
   params: Promise<{ slug: string }>;
 };
