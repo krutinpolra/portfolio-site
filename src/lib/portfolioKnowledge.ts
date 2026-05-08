@@ -1,7 +1,5 @@
-import { readFile } from 'node:fs/promises';
-import path from 'node:path';
+import { supabaseRest } from '@/lib/supabasePortfolio';
 
-const KNOWLEDGE_DIR = path.join(process.cwd(), 'portfolio-knowledge');
 const KNOWLEDGE_FILES = [
   'chatbot-guidelines.md',
   'about.md',
@@ -116,6 +114,14 @@ const PROJECT_KNOWLEDGE_FILES = [
 ] as const;
 
 const cachedKnowledge = new Map<string, string>();
+let cachedDocuments: KnowledgeDocumentRow[] | null = null;
+
+type KnowledgeDocumentRow = {
+  source_path: string;
+  title: string;
+  content: string;
+  display_order: number | null;
+};
 
 function normalizeMarkdown(content: string) {
   return content.replace(/\r\n/g, '\n').trim();
@@ -156,15 +162,48 @@ function shouldLimitProjectFile(fileName: string) {
   return PROJECT_KNOWLEDGE_FILES.some(project => project.fileName === fileName);
 }
 
-async function readKnowledgeFile(fileName: string) {
-  const filePath = path.join(KNOWLEDGE_DIR, fileName);
-  const content = await readFile(filePath, 'utf8');
-  const normalizedContent = normalizeMarkdown(content);
-  const safeContent = shouldLimitProjectFile(fileName)
+async function getSupabaseKnowledgeDocuments() {
+  if (process.env.NODE_ENV === 'production' && cachedDocuments) {
+    return cachedDocuments;
+  }
+
+  const documents = await supabaseRest<KnowledgeDocumentRow[]>(
+    'knowledge_documents?select=source_path,title,content,display_order&order=display_order.asc'
+  );
+
+  cachedDocuments = documents;
+  return documents;
+}
+
+function formatKnowledgeDocument(document: KnowledgeDocumentRow) {
+  const normalizedContent = normalizeMarkdown(document.content);
+  const safeContent = shouldLimitProjectFile(document.source_path)
     ? normalizedContent.slice(0, MAX_PROJECT_FILE_CHARS)
     : normalizedContent;
 
-  return `# Source: ${fileName}\n\n${safeContent}`;
+  return `# Source: ${document.source_path}\n# Title: ${document.title}\n\n${safeContent}`;
+}
+
+async function getSupabaseKnowledge(query = '') {
+  const documents = await getSupabaseKnowledgeDocuments();
+  const matchingProjectFiles = getMatchingProjectFiles(query);
+  const selectedFiles =
+    matchingProjectFiles.length > 0
+      ? [...PROJECT_QUERY_CORE_FILES, ...matchingProjectFiles]
+      : [...getCoreKnowledgeFiles(query)];
+  const selectedSet = new Set<string>(selectedFiles);
+  const selectedDocuments = documents.filter(document =>
+    selectedSet.has(document.source_path)
+  );
+
+  if (selectedDocuments.length === 0) {
+    throw new Error('No matching Supabase knowledge documents found.');
+  }
+
+  return selectedDocuments
+    .map(formatKnowledgeDocument)
+    .join('\n\n---\n\n')
+    .slice(0, MAX_KNOWLEDGE_CHARS);
 }
 
 export async function getPortfolioKnowledge(query = '') {
@@ -180,8 +219,7 @@ export async function getPortfolioKnowledge(query = '') {
     return cachedKnowledge.get(cacheKey) as string;
   }
 
-  const sections = await Promise.all(uniqueFiles.map(readKnowledgeFile));
-  const knowledge = sections.join('\n\n---\n\n').slice(0, MAX_KNOWLEDGE_CHARS);
+  const knowledge = await getSupabaseKnowledge(query);
 
   cachedKnowledge.set(cacheKey, knowledge);
   return knowledge;

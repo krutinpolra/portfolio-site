@@ -6,7 +6,7 @@ import { FaShieldAlt, FaUsers } from 'react-icons/fa';
 import type { IconType } from 'react-icons';
 import { MdOutlineWorkOutline } from 'react-icons/md';
 import Link from 'next/link';
-import { experienceDetails } from '@/model/Experience.data';
+import type { ExperienceDetail } from '@/model/Experience.data';
 
 const ParticleSnow = dynamic(
   () => import('@/assets/animatedComponent/ParticlesSnow'),
@@ -37,7 +37,11 @@ const chipVariants: Variants = {
   },
 };
 
-export default function Experience() {
+type ExperienceProps = {
+  experiences: ExperienceDetail[];
+};
+
+export default function Experience({ experiences }: ExperienceProps) {
   return (
     <section
       id="experience"
@@ -88,7 +92,7 @@ export default function Experience() {
             style={{ originY: 0 }}
           />
 
-          {experienceDetails.map((experience, index) => {
+          {experiences.map((experience, index) => {
             const Icon = iconBySlug[experience.slug] ?? FaShieldAlt;
 
             return (

@@ -41,6 +41,11 @@ type ChatResponse = {
   };
 };
 
+type ChatHistoryMessage = {
+  role: 'assistant' | 'user';
+  content: string;
+};
+
 type OpenChatEvent = CustomEvent<{
   prompt?: string;
   projectTitle?: string;
@@ -61,6 +66,8 @@ const initialMessages: ChatMessage[] = [
       "Hi, I'm Krutin's portfolio assistant.\n\n- Ask about projects, experience, skills, or resume.\n- Open a project explainer for a structured recruiter-friendly summary.",
   },
 ];
+const MAX_HISTORY_MESSAGES = 8;
+const MAX_HISTORY_MESSAGE_LENGTH = 700;
 
 function createProjectPrompt(projectTitle: string) {
   return `Explain the "${projectTitle}" project to a recruiter in simple terms. Include what it does, the tech used, the main challenges, and why it matters.`;
@@ -87,6 +94,21 @@ function useDesktopSidebar() {
   }, []);
 
   return isDesktopSidebar;
+}
+
+function createConversationHistory(messages: ChatMessage[]) {
+  return messages
+    .filter(
+      message =>
+        (message.role === 'assistant' || message.role === 'user') &&
+        message.id !== 'welcome' &&
+        message.content !== 'Thinking...'
+    )
+    .slice(-MAX_HISTORY_MESSAGES)
+    .map<ChatHistoryMessage>(message => ({
+      role: message.role,
+      content: message.content.slice(0, MAX_HISTORY_MESSAGE_LENGTH),
+    }));
 }
 
 function getInternalPortfolioHash(href: string) {
@@ -298,12 +320,18 @@ export default function PortfolioChatbot() {
   const [sessionCost, setSessionCost] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const isDesktopSidebar = useDesktopSidebar();
+  const messagesRef = useRef(messages);
+
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
 
   const sendMessage = useCallback(async (message: string) => {
     const trimmedMessage = message.trim();
     if (!trimmedMessage || isSending) return;
 
     const assistantMessageId = `assistant-${Date.now()}`;
+    const history = createConversationHistory(messagesRef.current);
     setIsSending(true);
     setInput('');
     setMessages(currentMessages => [
@@ -324,7 +352,7 @@ export default function PortfolioChatbot() {
       const response = await fetch('/api/ai/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: trimmedMessage }),
+        body: JSON.stringify({ message: trimmedMessage, history }),
       });
 
       const contentType = response.headers.get('content-type') ?? '';

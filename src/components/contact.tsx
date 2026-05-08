@@ -4,13 +4,19 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { type FormEvent, useState } from 'react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
 import { FiMail } from 'react-icons/fi';
+import type { PortfolioContactLink } from '@/lib/supabasePortfolio';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
+  contactLinks?: PortfolioContactLink[];
 }
 
-export default function ContactModal({ isOpen, onClose }: Props) {
+export default function ContactModal({
+  isOpen,
+  onClose,
+  contactLinks = [],
+}: Props) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,6 +26,12 @@ export default function ContactModal({ isOpen, onClose }: Props) {
     'idle'
   );
   const [errorMessage, setErrorMessage] = useState('');
+  const linkedinUrl =
+    contactLinks.find(link => link.kind === 'linkedin')?.url ??
+    'https://linkedin.com/in/krutinpolra1444';
+  const githubUrl =
+    contactLinks.find(link => link.kind === 'github')?.url ??
+    'https://github.com/krutinpolra';
 
   const handleClose = () => {
     if (status === 'sending') return;
@@ -77,14 +89,14 @@ export default function ContactModal({ isOpen, onClose }: Props) {
             {/* Icons */}
             <div className="flex justify-center gap-6 mb-4 text-2xl text-indigo-400">
               <a
-                href="https://linkedin.com/in/krutinpolra1444"
+                href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <FaLinkedin />
               </a>
               <a
-                href="https://github.com/krutinpolra"
+                href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
               >
