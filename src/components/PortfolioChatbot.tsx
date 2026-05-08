@@ -327,7 +327,15 @@ export default function PortfolioChatbot() {
         body: JSON.stringify({ message: trimmedMessage }),
       });
 
-      const data = (await response.json()) as ChatResponse;
+      const contentType = response.headers.get('content-type') ?? '';
+      const data = contentType.includes('application/json')
+        ? ((await response.json()) as ChatResponse)
+        : ({
+            error:
+              response.status === 504
+                ? 'The AI assistant timed out. Please try a shorter question.'
+                : 'Sorry, I could not answer that right now.',
+          } satisfies ChatResponse);
       const responseCost =
         data.cost?.pricingAvailable && data.cost.totalUsd
           ? data.cost.totalUsd

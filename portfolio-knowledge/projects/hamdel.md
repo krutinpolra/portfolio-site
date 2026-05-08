@@ -43,6 +43,40 @@ technical logs, exporting reports, and controlling role-based permissions.
 
 ---
 
+## Quick Chatbot Summary
+
+Use this summary for short recruiter answers, project card explanations, and
+fast chatbot responses.
+
+Hamdel Care Platform is a full-stack care-service platform built from a detailed
+SRS. It models a real healthcare-adjacent marketplace with three user surfaces:
+Care Receiver, Care Giver, and Admin Panel.
+
+The Care Receiver side supports registration, KYC/OTP, profile completion,
+recipient/loved-one management, medical information, address book, safety plans,
+care requests, booking history, matching methods, wallet/payment flow, chat,
+invoices, reviews, referrals, settings, AI-enabled FAQ, and support tickets.
+
+The Care Giver side supports registration, KYC/OTP, business and qualification
+profiles, credential evaluation, document upload, exams, badge assignment,
+service abilities, appointment requests, availability calendar, live location,
+reviews, referrals, settings, AI-enabled FAQ, and support tickets.
+
+The Admin Panel supports role-based access for super admin, operations, customer
+support, finance, CMS, marketing, compliance and safety, technical admin, data
+analyst, content moderator, and custom roles. Admin modules include order
+management, caregiver management, care receiver management, support operations,
+finance/accounting, CMS, marketing tools, compliance and safety, technical logs,
+reporting, audit logs, access control, internal notes, and escalation workflows.
+
+Key technical themes include full-stack product decomposition, database
+modeling, dropdown/reference data design, booking and matching logic,
+wallet/escrow/payment workflows, chat moderation, role-based access control,
+KYC/OTP flows, document verification, compliance-aware medical data handling,
+and admin operational dashboards.
+
+---
+
 ## Design Principles From The SRS
 
 - Categorize features according to the app classifications: Care Receiver, Care
