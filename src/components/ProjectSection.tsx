@@ -17,7 +17,7 @@ const allCategories = [
   'Cloud',
   'React',
   'Python',
-  'Hackathons',
+  'AI / Computer Vision',
 ];
 
 function useScrollTriggeredCards() {

@@ -7,11 +7,17 @@ const KNOWLEDGE_FILES = [
   'about.md',
   'experience.md',
   'projects.md',
+  'projects/ai_tool_suite.md',
+  'projects/hamdel.md',
+  'projects/fragments.md',
+  'projects/hotel_reservation.md',
+  'projects/culinary.md',
+  'projects/met.md',
   'projects/portfolio.md',
   'skills.md',
   'contact.md',
 ] as const;
-const MAX_KNOWLEDGE_CHARS = 60_000;
+const MAX_KNOWLEDGE_CHARS = 160_000;
 
 let cachedKnowledge: string | null = null;
 

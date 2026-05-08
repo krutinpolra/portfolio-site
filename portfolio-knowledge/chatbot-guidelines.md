@@ -56,6 +56,27 @@ The chatbot should:
 
 ---
 
+## Project Knowledge Routing
+
+When a user asks about a specific project, first identify the project from
+`projects.md`, then prefer the matching detailed project knowledge file.
+
+Detailed project files currently included:
+
+- `projects/portfolio.md` for the Personal Portfolio.
+- `projects/ai_tool_suite.md` for AI Job Search Assistant.
+- `projects/hamdel.md` for Hamdel Care Platform.
+- `projects/fragments.md` for Fragments Microservice.
+- `projects/hotel_reservation.md` for Hotel Reservation System.
+- `projects/culinary.md` for Culinary Parcel.
+- `projects/met.md` for Met Museum Explorer.
+
+Use `projects.md` for quick comparison questions and the detailed project files
+for project explanations, interview answers, technical depth, and recruiter
+summaries.
+
+---
+
 ## Project Explainer Format
 
 When explaining a project, always follow this structure:

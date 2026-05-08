@@ -13,6 +13,28 @@ export const projects: Project[] = [
     Category: ['React', 'Framer-motion', 'next.js', 'full-stack'],
   },
   {
+    title: 'AI Job Search Assistant',
+    description:
+      'An AI-powered career intelligence CLI that analyzes job postings, compares them against a resume, identifies skill gaps, and generates targeted application reports.',
+    image: '/images/AI-tool-suite-1.png',
+    techStack: ['TypeScript', 'Node.js', 'OpenRouter', 'Tavily', 'Zod'],
+    hueA: 235,
+    hueB: 290,
+    slug: 'ai-tool-suite',
+    Category: ['AI / Computer Vision', 'AI', 'React', 'full-stack'],
+  },
+  {
+    title: 'Hamdel Care Platform',
+    description:
+      'A full-stack care-service platform for care receivers, caregivers, and admins, covering care requests, bookings, profiles, payments, chat, support, and operational management.',
+    image: '/images/hamdel-1.png',
+    techStack: ['Full-Stack', 'React', 'Node.js', 'Database Design', 'Admin Panel'],
+    hueA: 195,
+    hueB: 155,
+    slug: 'hamdel-care-platform',
+    Category: ['full-stack', 'React'],
+  },
+  {
     title: 'Fragments API',
     description:
       'A file storage and conversion API supporting Markdown rendering, image transformations, and AWS integrations.',

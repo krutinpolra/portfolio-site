@@ -525,3 +525,13 @@ The following should not be added to this project knowledge file:
 - Any employer-confidential information.
 
 This file should only contain public, recruiter-safe facts.
+
+## Reuse Rules
+
+When using this knowledge base in a chatbot, portfolio, or public README:
+
+- Keep authentication descriptions high level.
+- Keep deployment descriptions high level.
+- Keep infrastructure descriptions generic.
+- Do not add private project configuration.
+- Do not add private operational notes.

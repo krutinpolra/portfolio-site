@@ -35,9 +35,69 @@ Demonstrates frontend engineering, UI polish, and personal branding.
 
 ---
 
+## AI Job Search Assistant
+
+**Slug:** ai-tool-suite  
+**Type:** AI-powered career intelligence and job application assistant  
+**Detail File:** /projects/ai_tool_suite.md
+
+### Summary
+
+An AI job search assistant that analyzes job postings, compares them against a
+resume, identifies skill gaps, researches companies, and generates targeted
+application advice, cover letter direction, interview prep topics, and reports.
+
+### Key Focus Areas
+
+- Job posting PDF extraction
+- Resume and market gap analysis
+- Targeted application fit scoring
+- Company research with Tavily
+- Structured LLM outputs with validation
+- Markdown and HTML report generation
+- Evaluation, diagnostics, and cost tracking
+
+### Recruiter Insight
+
+Demonstrates practical AI engineering, CLI pipeline design, structured output
+validation, research-augmented reasoning, and the ability to turn messy career
+inputs into actionable job-search intelligence.
+
+---
+
+## Hamdel Care Platform
+
+**Slug:** hamdel-care-platform  
+**Type:** Full-stack care-service and admin management platform  
+**Detail File:** /projects/hamdel.md
+
+### Summary
+
+A full-stack care-service platform based on a detailed SRS for care receivers,
+caregivers, and admins. It supports care requests, booking history, caregiver
+matching, profiles, loved-one management, payments, chat, help centre workflows,
+and a role-based admin panel.
+
+### Key Focus Areas
+
+- Care receiver and caregiver application flows
+- Booking, matching, reviews, invoices, and support tickets
+- Address book, medical profile, preferences, and safety plans
+- Wallet, payment, refund, payout, and finance management
+- Role-based admin access and operational dashboards
+- Compliance, audit logs, technical tools, and AI-enabled FAQ support
+
+### Recruiter Insight
+
+Demonstrates full-stack product planning, healthcare workflow modeling,
+role-based admin design, data classification, and the ability to translate a
+large SRS into structured application features.
+
+---
+
 ## Fragments Microservice
 
-**Slug:** fragments-microservice  
+**Slug:** fragments-Microservice  
 **Type:** Cloud-native backend API  
 **Detail File:** /projects/fragments.md
 
@@ -62,7 +122,7 @@ Demonstrates backend, cloud, and DevOps capabilities.
 
 **Slug:** hotel-reservation-system  
 **Type:** Desktop application  
-**Detail File:** /projects/hotel.md
+**Detail File:** /projects/hotel_reservation.md
 
 ### Summary
 
@@ -138,9 +198,9 @@ When answering user queries:
   - "Explain this project" → Use detailed project file
   - "What projects has Krutin built?" → Use this overview
   - "Best project?" → Prioritize:
-    1. Fragments Microservice
-    2. Portfolio Website
-    3. AI Tooling (if added later)
+    1. AI Job Search Assistant
+    2. Hamdel Care Platform
+    3. Fragments Microservice
 
 ---
 

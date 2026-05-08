@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { projectDetails } from '@/model/projectDetail.model';
 import Image from 'next/image';
@@ -21,6 +21,22 @@ export default function ProjectDetail() {
   const [index, setIndex] = useState(0);
 
   const project = projectDetails.find(p => p.slug === slug);
+  const imageCount = project?.images.length ?? 0;
+
+  useEffect(() => {
+    setIndex(0);
+  }, [slug]);
+
+  useEffect(() => {
+    if (imageCount <= 1) return;
+
+    const intervalId = window.setInterval(() => {
+      setIndex(prev => (prev + 1) % imageCount);
+    }, 4000);
+
+    return () => window.clearInterval(intervalId);
+  }, [imageCount]);
+
   if (!project) return notFound();
 
   const hueA = project.hueA || 240;

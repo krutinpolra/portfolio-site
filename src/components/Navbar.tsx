@@ -38,6 +38,7 @@ export default function Navbar({ onOpenContact }: NavbarProps) {
   useEffect(() => {
     if (pathname !== '/') {
       setActiveHref('');
+      setShowNav(true);
       return;
     }
 
