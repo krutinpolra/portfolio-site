@@ -14,6 +14,10 @@ import Growth from '../assets/Animated-Icons/Growth.json';
 import profilePic from '@/assets/images/profilepic.jpeg';
 import profilePic2 from '@/assets/images/profilepic2.jpeg';
 import profilePic3 from '@/assets/images/profilepic3.jpeg';
+import type {
+  PortfolioContactLink,
+  PortfolioProfile,
+} from '@/lib/supabasePortfolio';
 
 const Lottie = dynamic(() => import('lottie-react'), {
   ssr: false,
@@ -109,10 +113,28 @@ const carouselImages = [
   },
 ];
 
-export default function About() {
+type AboutProps = {
+  profile: PortfolioProfile | null;
+  contactLinks: PortfolioContactLink[];
+};
+
+export default function About({ profile, contactLinks }: AboutProps) {
   const [active, setActive] = useState(values[0]);
   const [activeImage, setActiveImage] = useState(0);
   const [isModalOpen, setModalOpen] = useState(false);
+  const githubUrl =
+    profile?.githubUrl ??
+    contactLinks.find(link => link.kind === 'github')?.url ??
+    'https://github.com/krutinpolra';
+  const linkedinUrl =
+    profile?.linkedinUrl ??
+    contactLinks.find(link => link.kind === 'linkedin')?.url ??
+    'https://www.linkedin.com/in/krutinpolra1444/';
+  const instagramUrl =
+    profile?.instagramUrl ??
+    contactLinks.find(link => link.kind === 'instagram')?.url ??
+    'https://www.instagram.com/k_p_1444/';
+  const resumeUrl = profile?.resumeUrl ?? '/resume.pdf';
 
   useEffect(() => {
     const interval = window.setInterval(() => {
@@ -128,7 +150,11 @@ export default function About() {
       className="relative overflow-hidden px-6 pb-20 text-white bg-gradient-to-b from-black via-[#0b0b1d] to-black"
     >
       <ParticleSnow id="tsparticles-about" />
-      <ContactModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+      <ContactModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        contactLinks={contactLinks}
+      />
 
       <div className="relative z-10 mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center text-center">
         <TypeAnimation
@@ -152,9 +178,8 @@ export default function About() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
         >
-          Hi, I&apos;m <span className="font-semibold text-white">Krutin</span>,
-          a full-stack developer focused on applied AI engineering, secure web
-          apps, and product-ready cloud tools.
+          {profile?.summary ??
+            "Hi, I'm Krutin, a full-stack developer focused on applied AI engineering, secure web apps, and product-ready cloud tools."}
         </motion.p>
 
         <motion.div
@@ -290,8 +315,9 @@ export default function About() {
             <p>
               Hi, I&apos;m{' '}
               <span className="text-indigo-400 font-semibold">Krutin</span>, a
-              full-stack developer with production experience building secure,
-              accessible, and scalable web applications.
+              {profile?.headline
+                ? ` ${profile.headline.toLowerCase()}`
+                : ' full-stack developer with production experience building secure, accessible, and scalable web applications.'}
             </p>
             <p className="mt-4">
               I enjoy turning complex workflows into clean digital products
@@ -318,7 +344,7 @@ export default function About() {
               viewport={{ once: true }}
             >
               <motion.a
-                href="https://github.com/krutinpolra"
+                href={githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.2 }}
@@ -330,7 +356,7 @@ export default function About() {
               </motion.a>
 
               <motion.a
-                href="https://www.linkedin.com/in/krutinpolra1444/"
+                href={linkedinUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="View on LinkedIn"
@@ -342,7 +368,7 @@ export default function About() {
                 <FaLinkedin />
               </motion.a>
               <motion.a
-                href="https://www.instagram.com/k_p_1444/"
+                href={instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="View on Instagram"
@@ -412,7 +438,7 @@ export default function About() {
           viewport={{ once: true }}
         >
           <a
-            href="/resume.pdf"
+            href={resumeUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-6 py-3 border border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white rounded-full transition"

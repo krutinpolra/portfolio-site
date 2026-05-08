@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ProjectCard from './ProjectCard';
-import { projects } from '@/model/Project.data';
+import type { Project } from '@/model/projectModel/project.model';
 import dynamic from 'next/dynamic';
 const ParticleSnow = dynamic(
   () => import('@/assets/animatedComponent/ParticlesSnow'),
@@ -36,7 +36,11 @@ function useScrollTriggeredCards() {
   return isScrollTriggered;
 }
 
-export default function ProjectSection() {
+type ProjectSectionProps = {
+  projects: Project[];
+};
+
+export default function ProjectSection({ projects }: ProjectSectionProps) {
   const [selected, setSelected] = useState('All');
   const [activeMobileProject, setActiveMobileProject] = useState<string | null>(
     null
@@ -53,7 +57,7 @@ export default function ProjectSection() {
               stack.toLowerCase().includes(selected.toLowerCase())
             )
           ),
-    [selected]
+    [projects, selected]
   );
 
   useEffect(() => {

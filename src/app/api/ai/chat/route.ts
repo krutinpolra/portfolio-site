@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPortfolioKnowledge } from '@/lib/portfolioKnowledge';
-import { projects } from '@/model/Project.data';
+import { getPortfolioProjects } from '@/lib/supabasePortfolio';
 
 export const runtime = 'nodejs';
 
 const OPENAI_RESPONSES_URL = 'https://api.openai.com/v1/responses';
 const DEFAULT_MODEL = 'gpt-4o-mini';
 const MAX_MESSAGE_LENGTH = 1000;
+const MAX_HISTORY_MESSAGES = 8;
+const MAX_HISTORY_MESSAGE_LENGTH = 700;
 const AI_TIMEOUT_MS = 8_500;
 const ONE_MILLION = 1_000_000;
 const MODEL_ALIASES: Record<string, string> = {
@@ -49,6 +51,11 @@ type OpenAIResponse = {
   };
 };
 
+type ChatHistoryMessage = {
+  role: 'assistant' | 'user';
+  content: string;
+};
+
 const systemPrompt = `
 You are Krutin Polra's recruiter-facing portfolio assistant.
 
@@ -88,6 +95,27 @@ Instructions:
 - If the answer is not available in the knowledge base, say the information is not available.
 - Do not mention internal file names unless the user asks how the chatbot knowledge is maintained.
 `;
+}
+
+function createConversationInput(
+  message: string,
+  history: ChatHistoryMessage[]
+) {
+  if (history.length === 0) return message;
+
+  const conversation = history
+    .map(
+      item =>
+        `${item.role === 'user' ? 'User' : 'Assistant'}: ${item.content}`
+    )
+    .join('\n\n');
+
+  return `Conversation so far in this browser session:
+
+${conversation}
+
+Current user message:
+${message}`;
 }
 
 function getClientIp(request: NextRequest) {
@@ -142,7 +170,36 @@ function getResponseText(data: OpenAIResponse) {
     .trim();
 }
 
-function getLocalAnswer(message: string) {
+function getChatHistory(body: unknown): ChatHistoryMessage[] {
+  if (
+    typeof body !== 'object' ||
+    body === null ||
+    !('history' in body) ||
+    !Array.isArray(body.history)
+  ) {
+    return [];
+  }
+
+  return body.history
+    .filter((item): item is ChatHistoryMessage => {
+      return (
+        typeof item === 'object' &&
+        item !== null &&
+        'role' in item &&
+        (item.role === 'assistant' || item.role === 'user') &&
+        'content' in item &&
+        typeof item.content === 'string'
+      );
+    })
+    .slice(-MAX_HISTORY_MESSAGES)
+    .map(item => ({
+      role: item.role,
+      content: item.content.trim().slice(0, MAX_HISTORY_MESSAGE_LENGTH),
+    }))
+    .filter(item => item.content.length > 0);
+}
+
+async function getLocalAnswer(message: string) {
   const normalizedMessage = message.toLowerCase();
 
   if (
@@ -150,6 +207,7 @@ function getLocalAnswer(message: string) {
     /\bprojects?\b/.test(normalizedMessage) &&
     /\b(built|build|made|created|portfolio)\b/.test(normalizedMessage)
   ) {
+    const projects = await getPortfolioProjects();
     const projectList = projects
       .map(project => `- **${project.title}** - ${project.description}`)
       .join('\n');
@@ -230,11 +288,16 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const localAnswer = getLocalAnswer(message);
+  const history = getChatHistory(body);
+  const knowledgeQuery = [...history.map(item => item.content), message].join(
+    '\n'
+  );
+
+  const localAnswer = await getLocalAnswer(message);
   if (localAnswer) {
     return NextResponse.json({
       answer: localAnswer,
-      model: 'local-portfolio-knowledge',
+      model: 'supabase-portfolio-knowledge',
       usage: {
         inputTokens: 0,
         outputTokens: 0,
@@ -251,7 +314,8 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const portfolioKnowledge = await getPortfolioKnowledge(message);
+    const portfolioKnowledge = await getPortfolioKnowledge(knowledgeQuery);
+    const input = createConversationInput(message, history);
     const abortController = new AbortController();
     const timeoutId = setTimeout(() => abortController.abort(), AI_TIMEOUT_MS);
 
@@ -265,7 +329,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify({
         model,
         instructions: `${systemPrompt}\n${createKnowledgePrompt(portfolioKnowledge)}`,
-        input: message,
+        input,
         temperature: 0.3,
         max_output_tokens: 300,
       }),
