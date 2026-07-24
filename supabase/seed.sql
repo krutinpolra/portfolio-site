@@ -32,11 +32,176 @@ insert into public.projects (
   github_url, live_url, docs_url, video_demo_url, hue_a, hue_b, featured,
   display_order, status
 ) values (
+  'personal-finance-agent', 'Personal Finance Agent', 'An AI agent that reads bank and credit-card statements in any format, categorizes every transaction with a self-correcting tool-calling loop, and hands off to a second agent that reviews spending and gives budget advice.',
+  'A hand-built multi-agent personal finance system: an extraction agent reads statements (CSV, PDF, image, or DOCX) into structured transactions, a categorizer agent uses a deterministic merchant lookup with LLM fallback and flags its own low-confidence guesses, a self-correction pass re-checks those flagged rows with a stricter prompt, and a Budget Advisor agent reviews the categorized totals against spending benchmarks to write plain-English recommendations. Built without an agent framework (no LangChain/CrewAI) specifically to learn how agent loops and multi-agent handoffs work under the hood.', 'AI-powered personal finance categorization and budgeting agent', '/images/finance-agent-1.png',
+  'https://github.com/krutinpolra/finance-agent', 'https://finance-agent-xt7dfaw8bw6sgyjptd9drr.streamlit.app', 'https://github.com/krutinpolra/finance-agent#readme',
+  null, 95, 150,
+  true, 1, 'published'
+)
+on conflict (slug) do update set
+  title = excluded.title,
+  description = excluded.description,
+  long_description = excluded.long_description,
+  project_type = excluded.project_type,
+  primary_image_url = excluded.primary_image_url,
+  github_url = excluded.github_url,
+  live_url = excluded.live_url,
+  docs_url = excluded.docs_url,
+  video_demo_url = excluded.video_demo_url,
+  hue_a = excluded.hue_a,
+  hue_b = excluded.hue_b,
+  featured = excluded.featured,
+  display_order = excluded.display_order,
+  status = excluded.status;
+
+delete from public.project_images where project_id = (select id from public.projects where slug = 'personal-finance-agent');
+
+insert into public.project_images (project_id, image_url, alt_text, display_order)
+select id, '/images/finance-agent-1.png', 'Personal Finance Agent screenshot 1', 1
+from public.projects where slug = 'personal-finance-agent';
+
+insert into public.project_images (project_id, image_url, alt_text, display_order)
+select id, '/images/finance-agent-2.png', 'Personal Finance Agent screenshot 2', 2
+from public.projects where slug = 'personal-finance-agent';
+
+delete from public.project_features where project_id = (select id from public.projects where slug = 'personal-finance-agent');
+
+insert into public.project_features (project_id, feature_text, display_order)
+select id, 'Accepts one or more statements per upload in CSV, PDF, PNG/JPG, or DOCX format and merges them into a single transaction table', 1
+from public.projects where slug = 'personal-finance-agent';
+
+insert into public.project_features (project_id, feature_text, display_order)
+select id, 'Categorizes every transaction with a tool-calling agent that checks a deterministic known-merchant lookup first and only falls back to model judgment when needed', 2
+from public.projects where slug = 'personal-finance-agent';
+
+insert into public.project_features (project_id, feature_text, display_order)
+select id, 'Self-corrects by re-running anything the agent itself flags as low confidence through a stricter, reasoning-required second pass', 3
+from public.projects where slug = 'personal-finance-agent';
+
+insert into public.project_features (project_id, feature_text, display_order)
+select id, 'Hands the categorized summary to a second agent, a Budget Advisor, which checks category spend against budgeting benchmarks via its own tool and writes a plain-English recommendation', 4
+from public.projects where slug = 'personal-finance-agent';
+
+insert into public.project_features (project_id, feature_text, display_order)
+select id, 'Uses Claude native PDF/image input for extraction and python-docx for Word document text extraction', 5
+from public.projects where slug = 'personal-finance-agent';
+
+insert into public.project_features (project_id, feature_text, display_order)
+select id, 'Includes a hand-labeled evaluation set and script that measures categorization accuracy end-to-end', 6
+from public.projects where slug = 'personal-finance-agent';
+
+insert into public.project_features (project_id, feature_text, display_order)
+select id, 'Hand-rolled agent loop reused across four specialized agents instead of relying on an agent framework', 7
+from public.projects where slug = 'personal-finance-agent';
+
+insert into public.project_features (project_id, feature_text, display_order)
+select id, 'Deployed as a live demo on Streamlit Community Cloud', 8
+from public.projects where slug = 'personal-finance-agent';
+
+insert into public.technologies (name) values ('Python') on conflict (name) do nothing;
+
+insert into public.technologies (name) values ('Streamlit') on conflict (name) do nothing;
+
+insert into public.technologies (name) values ('Anthropic Claude API') on conflict (name) do nothing;
+
+insert into public.technologies (name) values ('pandas') on conflict (name) do nothing;
+
+insert into public.technologies (name) values ('python-docx') on conflict (name) do nothing;
+
+insert into public.technologies (name) values ('Multi-Agent Systems') on conflict (name) do nothing;
+
+insert into public.technologies (name) values ('Tool Calling') on conflict (name) do nothing;
+
+delete from public.project_technologies where project_id = (select id from public.projects where slug = 'personal-finance-agent');
+
+insert into public.project_technologies (project_id, technology_id, display_order)
+select p.id, t.id, 1
+from public.projects p
+join public.technologies t on t.name = 'Python'
+where p.slug = 'personal-finance-agent'
+on conflict (project_id, technology_id) do update set display_order = excluded.display_order;
+
+insert into public.project_technologies (project_id, technology_id, display_order)
+select p.id, t.id, 2
+from public.projects p
+join public.technologies t on t.name = 'Streamlit'
+where p.slug = 'personal-finance-agent'
+on conflict (project_id, technology_id) do update set display_order = excluded.display_order;
+
+insert into public.project_technologies (project_id, technology_id, display_order)
+select p.id, t.id, 3
+from public.projects p
+join public.technologies t on t.name = 'Anthropic Claude API'
+where p.slug = 'personal-finance-agent'
+on conflict (project_id, technology_id) do update set display_order = excluded.display_order;
+
+insert into public.project_technologies (project_id, technology_id, display_order)
+select p.id, t.id, 4
+from public.projects p
+join public.technologies t on t.name = 'pandas'
+where p.slug = 'personal-finance-agent'
+on conflict (project_id, technology_id) do update set display_order = excluded.display_order;
+
+insert into public.project_technologies (project_id, technology_id, display_order)
+select p.id, t.id, 5
+from public.projects p
+join public.technologies t on t.name = 'python-docx'
+where p.slug = 'personal-finance-agent'
+on conflict (project_id, technology_id) do update set display_order = excluded.display_order;
+
+insert into public.project_technologies (project_id, technology_id, display_order)
+select p.id, t.id, 6
+from public.projects p
+join public.technologies t on t.name = 'Multi-Agent Systems'
+where p.slug = 'personal-finance-agent'
+on conflict (project_id, technology_id) do update set display_order = excluded.display_order;
+
+insert into public.project_technologies (project_id, technology_id, display_order)
+select p.id, t.id, 7
+from public.projects p
+join public.technologies t on t.name = 'Tool Calling'
+where p.slug = 'personal-finance-agent'
+on conflict (project_id, technology_id) do update set display_order = excluded.display_order;
+
+insert into public.categories (name) values ('AI') on conflict (name) do nothing;
+
+insert into public.categories (name) values ('Python') on conflict (name) do nothing;
+
+insert into public.categories (name) values ('full-stack') on conflict (name) do nothing;
+
+delete from public.project_categories where project_id = (select id from public.projects where slug = 'personal-finance-agent');
+
+insert into public.project_categories (project_id, category_id)
+select p.id, c.id
+from public.projects p
+join public.categories c on c.name = 'AI'
+where p.slug = 'personal-finance-agent'
+on conflict (project_id, category_id) do nothing;
+
+insert into public.project_categories (project_id, category_id)
+select p.id, c.id
+from public.projects p
+join public.categories c on c.name = 'Python'
+where p.slug = 'personal-finance-agent'
+on conflict (project_id, category_id) do nothing;
+
+insert into public.project_categories (project_id, category_id)
+select p.id, c.id
+from public.projects p
+join public.categories c on c.name = 'full-stack'
+where p.slug = 'personal-finance-agent'
+on conflict (project_id, category_id) do nothing;
+
+insert into public.projects (
+  slug, title, description, long_description, project_type, primary_image_url,
+  github_url, live_url, docs_url, video_demo_url, hue_a, hue_b, featured,
+  display_order, status
+) values (
   'portfolio-krutin-dev', 'Personal Portfolio', 'A full-stack React-based portfolio showcasing my projects, skills, and design capabilities with interactive UI components and animations.',
   'A modern personal portfolio built with Next.js, React, TypeScript, Tailwind CSS, Framer Motion, tsParticles, dynamic project pages, a contact workflow, and an AI-powered portfolio chatbot.', 'Personal portfolio website', '/images/portfolio-2.png',
   'https://github.com/krutinpolra/portfolio-site', 'https://krutin.dev', 'https://github.com/krutinpolra/portfolio-site#readme',
   null, 260, 320,
-  true, 1, 'published'
+  true, 2, 'published'
 )
 on conflict (slug) do update set
   title = excluded.title,
@@ -222,7 +387,7 @@ insert into public.projects (
   'An end-to-end AI job search assistant that processes job posting PDFs, extracts structured role data, compares postings against a resume, researches companies, scores fit, and generates market, gap, application advisor, and evaluation reports.', 'AI-powered career intelligence and job application assistant', '/images/AI-tool-suite-1.png',
   'https://github.com/krutinpolra/AIP444', null, 'https://github.com/krutinpolra/AIP444#readme',
   null, 235, 290,
-  true, 2, 'published'
+  true, 3, 'published'
 )
 on conflict (slug) do update set
   title = excluded.title,
@@ -439,7 +604,7 @@ insert into public.projects (
   'A full-stack care-service platform designed from a detailed SRS for matching care receivers with caregivers, managing bookings, handling payments, enabling chat and support workflows, and giving admins operational control across users, orders, finance, compliance, and content.', 'Full-stack care-service and admin management platform', '/images/hamdel-1.png',
   null, null, null,
   null, 195, 155,
-  true, 3, 'published'
+  true, 4, 'published'
 )
 on conflict (slug) do update set
   title = excluded.title,
@@ -666,7 +831,7 @@ insert into public.projects (
   'A file storage and conversion API supporting text, JSON, Markdown, HTML, CSV, and image fragments, with authenticated ownership, metadata/content separation, AWS integrations, Docker, CI/CD, and automated testing.', 'Cloud-native backend API', '/images/fragment-microservice-1.png',
   'https://github.com/krutinpolra/fragments', null, 'https://github.com/krutinpolra/fragments#readme',
   null, 230, 270,
-  true, 4, 'published'
+  true, 5, 'published'
 )
 on conflict (slug) do update set
   title = excluded.title,
@@ -845,7 +1010,7 @@ insert into public.projects (
   'A desktop hotel reservation system where guests can book rooms and administrators can manage rooms, bookings, cancellations, checkout, billing, and guest search through a JavaFX and SQLite application.', 'Desktop application', '/images/hotel-reservation-1.png',
   'https://github.com/krutinpolra/Application-Development-Workshops/tree/main/final%20project/HotelReservation', null, 'https://github.com/krutinpolra/Application-Development-Workshops/tree/main/final%20project/HotelReservation#readme',
   'https://github.com/krutinpolra/Application-Development-Workshops/tree/main/final%20project/video%20and%20reflaction', 280, 320,
-  false, 5, 'published'
+  false, 6, 'published'
 )
 on conflict (slug) do update set
   title = excluded.title,
@@ -1000,7 +1165,7 @@ insert into public.projects (
   'A full-stack culinary subscription platform offering dynamic meal kit listings, secure login, session-based authenticated user flows, MongoDB persistence, EJS pages, Bootstrap, Tailwind CSS, and custom layouts.', 'Full-stack web application', '/images/culinary-parcel-1.png',
   'https://github.com/krutinpolra/WEB322-kbpolra', 'https://web-322-kbpolra.vercel.app', 'https://github.com/krutinpolra/WEB322-kbpolra#readme',
   null, 160, 200,
-  false, 6, 'published'
+  false, 7, 'published'
 )
 on conflict (slug) do update set
   title = excluded.title,
@@ -1147,7 +1312,7 @@ insert into public.projects (
   'An API-driven artwork exploration app powered by the Metropolitan Museum of Art Collection API, with search, filtering, artwork details, favorites, recently viewed history, JWT authentication, MongoDB-backed APIs, and Jotai state management.', 'API-driven web application', '/images/met-1.png',
   'https://github.com/krutinpolra/met-museum', 'https://met-museum-wine.vercel.app', 'https://github.com/krutinpolra/met-museum#readme',
   null, 180, 210,
-  false, 7, 'published'
+  false, 8, 'published'
 )
 on conflict (slug) do update set
   title = excluded.title,
@@ -3232,6 +3397,36 @@ For detailed explanations, refer to individual project files in the `/projects` 
 
 ---
 
+## Personal Finance Agent
+
+**Slug:** personal-finance-agent  
+**Type:** AI-powered personal finance categorization and budgeting agent  
+**Detail File:** /projects/personal_finance_agent.md
+
+### Summary
+
+A hand-built multi-agent system that reads bank/credit-card statements in any
+format (CSV, PDF, image, or DOCX), categorizes every transaction, self-corrects
+its own low-confidence guesses, and hands the result to a Budget Advisor agent
+that reviews spending against benchmarks and gives plain-English advice. Built
+without an agent framework to learn how agent loops and multi-agent systems
+work from first principles.
+
+### Key Focus Areas
+
+- Hand-rolled tool-calling agent loop (no LangChain/CrewAI)
+- Multi-agent handoff between categorization and budget advice
+- Self-correction on low-confidence model outputs
+- Multi-format statement ingestion (CSV, PDF, image, DOCX)
+- Hand-labeled evaluation set and accuracy measurement
+
+### Recruiter Insight
+
+Demonstrates applied agentic AI engineering built from first principles,
+multi-agent orchestration, and a testing mindset applied to AI behavior.
+
+---
+
 ## Portfolio Website
 
 **Slug:** portfolio-krutin-dev  
@@ -3418,9 +3613,10 @@ When answering user queries:
   - "Explain this project" → Use detailed project file
   - "What projects has Krutin built?" → Use this overview
   - "Best project?" → Prioritize:
-    1. AI Job Search Assistant
-    2. Hamdel Care Platform
-    3. Fragments Microservice
+    1. Personal Finance Agent
+    2. AI Job Search Assistant
+    3. Hamdel Care Platform
+    4. Fragments Microservice
 
 ---
 
@@ -3448,6 +3644,36 @@ For detailed explanations, refer to individual project files in the `/projects` 
 
 ---
 
+## Personal Finance Agent
+
+**Slug:** personal-finance-agent  
+**Type:** AI-powered personal finance categorization and budgeting agent  
+**Detail File:** /projects/personal_finance_agent.md
+
+### Summary
+
+A hand-built multi-agent system that reads bank/credit-card statements in any
+format (CSV, PDF, image, or DOCX), categorizes every transaction, self-corrects
+its own low-confidence guesses, and hands the result to a Budget Advisor agent
+that reviews spending against benchmarks and gives plain-English advice. Built
+without an agent framework to learn how agent loops and multi-agent systems
+work from first principles.
+
+### Key Focus Areas
+
+- Hand-rolled tool-calling agent loop (no LangChain/CrewAI)
+- Multi-agent handoff between categorization and budget advice
+- Self-correction on low-confidence model outputs
+- Multi-format statement ingestion (CSV, PDF, image, DOCX)
+- Hand-labeled evaluation set and accuracy measurement
+
+### Recruiter Insight
+
+Demonstrates applied agentic AI engineering built from first principles,
+multi-agent orchestration, and a testing mindset applied to AI behavior.
+
+---
+
 ## Portfolio Website
 
 **Slug:** portfolio-krutin-dev  
@@ -3634,9 +3860,10 @@ When answering user queries:
   - "Explain this project" → Use detailed project file
   - "What projects has Krutin built?" → Use this overview
   - "Best project?" → Prioritize:
-    1. AI Job Search Assistant
-    2. Hamdel Care Platform
-    3. Fragments Microservice
+    1. Personal Finance Agent
+    2. AI Job Search Assistant
+    3. Hamdel Care Platform
+    4. Fragments Microservice
 
 ---
 
@@ -3647,6 +3874,305 @@ When answering user queries:
 - Always prefer detailed project files when available
 ', 5
 where null is null
+on conflict (source_path) do update set
+  project_id = excluded.project_id,
+  title = excluded.title,
+  document_type = excluded.document_type,
+  content = excluded.content,
+  display_order = excluded.display_order;
+
+insert into public.knowledge_documents (
+  project_id, source_path, title, document_type, content, display_order
+)
+select p.id, 'projects/personal_finance_agent.md', 'Personal Finance Agent Knowledge Base', 'markdown', '# Personal Finance Agent Knowledge Base
+
+## Executive Summary
+
+Personal Finance Agent is a hand-built multi-agent system that reads bank and
+credit-card statements in whatever format they show up in, categorizes every
+transaction, catches and rechecks its own low-confidence guesses, and hands
+the result to a second agent that reviews the numbers and gives budget advice.
+
+It was built from scratch, with no agent framework such as LangChain or
+CrewAI, specifically to learn how agent loops and multi-agent systems work
+under the hood rather than just how to call one.
+
+---
+
+## The Problem
+
+Categorizing spending from a real statement is tedious and the input is never
+clean: one person''s statement is a CSV export, another''s is a PDF from their
+bank, someone else has a photo of a receipt or a Word doc. Rule-based
+categorizers break the moment a merchant name doesn''t match a known pattern,
+and naive "ask an LLM once" approaches have no mechanism to notice when they
+are guessing. The project explores a more deliberate design: a cheap
+deterministic lookup for the easy majority of transactions, model judgment for
+the rest, a second pass that specifically targets the cases the model itself
+flagged as uncertain, and a downstream agent that turns the result into
+something a person can act on.
+
+---
+
+## What It Does
+
+- Accepts one or more statements per upload in CSV, PDF, PNG/JPG, or DOCX
+  format and merges them into a single transaction table.
+- Categorizes every transaction with a tool-calling agent that checks a local
+  known-merchant lookup first (instant, free, deterministic) and only falls
+  back to model judgment when the lookup has no answer.
+- Self-corrects: anything the agent itself marks low confidence gets a
+  second, stricter pass, with category definitions and a requirement to
+  reason before answering, instead of being shown to the user as-is.
+- Hands the categorized summary to a second agent, a Budget Advisor, which
+  checks each category''s spend against typical budgeting benchmarks via its
+  own tool and writes a plain-English recommendation.
+- Includes a hand-labeled evaluation set and a script that measures
+  categorization accuracy against it end-to-end.
+
+---
+
+## How It Works
+
+1. **Extraction agent** reads the file directly, using Claude''s native
+   PDF/image input or extracted text for DOCX, and returns structured
+   `{date, description, amount}` rows.
+2. **Categorizer agent** runs a tool-calling loop: known-merchant lookup
+   first, model judgment as fallback, flagging its own low-confidence
+   guesses.
+3. **Self-correction pass** re-runs only the low-confidence rows through a
+   stricter prompt before finalizing.
+4. **Budget Advisor agent** reviews the categorized totals against spending
+   benchmarks, using its own tool, and writes advice.
+
+Every agent in the system is the same underlying mechanism: call the model,
+check if it asked to use a tool, run the tool, feed the result back, repeat
+until it gives a final answer, specialized by system prompt and tool access.
+Writing that loop by hand once and reusing the pattern across four different
+agents was the actual point of the project.
+
+---
+
+## Technical Profile
+
+### Languages and Runtime
+
+- Python
+- Streamlit
+
+### AI and Data Capabilities
+
+- Hand-rolled tool-calling agent loop (no agent framework)
+- Multi-agent handoff between categorization and budget advice
+- Self-correction / re-verification of low-confidence model outputs
+- Multi-format document extraction (CSV, PDF, image, DOCX)
+- Evaluation harness for categorization accuracy
+
+### Libraries and Services
+
+- Anthropic Claude API (`claude-haiku-4-5`) for categorization,
+  self-correction, document/image extraction, and budget advice
+- pandas for tabular handling
+- python-docx for Word document text extraction
+- GitHub + Streamlit Community Cloud for free hosting
+
+---
+
+## Status
+
+- Hand-rolled agent loop with real tool-calling (categorization)
+- Self-correction pass on low-confidence results
+- Second agent (Budget Advisor) as the first multi-agent handoff
+- Multi-format, multi-file ingestion (CSV / PDF / image / DOCX via native
+  vision/document input)
+- Hand-labeled eval set and accuracy script
+- Deployed live demo on Streamlit Community Cloud
+- Not yet done: per-run cost/latency logging, a written design decisions doc
+
+---
+
+## Known Limitations
+
+- PDF/image extraction is best-effort; quality depends on how clean the
+  source scan or photo is, and it isn''t OCR-perfect.
+- No persistence yet: each upload is processed in-session, and nothing is
+  stored between visits.
+
+---
+
+## Recruiter-Relevant Value
+
+This project demonstrates the ability to build agentic AI systems from first
+principles rather than by wiring together a framework. Strong signals
+include:
+
+- hand-rolled agent loop design (call model, use tool, feed result back,
+  repeat)
+- multi-agent handoff and orchestration
+- self-correction / confidence-aware re-verification instead of blind
+  single-pass LLM output
+- multi-format document ingestion, including native vision/document model
+  input
+- a hand-labeled evaluation set and accuracy measurement, showing a testing
+  mindset applied to AI behavior, not just traditional code
+
+## Reuse Rules
+
+When using this knowledge base in a chatbot, portfolio, or public README:
+
+- Keep authentication descriptions high level.
+- Keep deployment descriptions high level.
+- Keep infrastructure descriptions generic.
+- Do not add private project configuration.
+- Do not add private operational notes.
+', 6
+from (select 'personal-finance-agent'::text as slug) input
+left join public.projects p on p.slug = input.slug
+where input.slug is not null
+union all
+select null, 'projects/personal_finance_agent.md', 'Personal Finance Agent Knowledge Base', 'markdown', '# Personal Finance Agent Knowledge Base
+
+## Executive Summary
+
+Personal Finance Agent is a hand-built multi-agent system that reads bank and
+credit-card statements in whatever format they show up in, categorizes every
+transaction, catches and rechecks its own low-confidence guesses, and hands
+the result to a second agent that reviews the numbers and gives budget advice.
+
+It was built from scratch, with no agent framework such as LangChain or
+CrewAI, specifically to learn how agent loops and multi-agent systems work
+under the hood rather than just how to call one.
+
+---
+
+## The Problem
+
+Categorizing spending from a real statement is tedious and the input is never
+clean: one person''s statement is a CSV export, another''s is a PDF from their
+bank, someone else has a photo of a receipt or a Word doc. Rule-based
+categorizers break the moment a merchant name doesn''t match a known pattern,
+and naive "ask an LLM once" approaches have no mechanism to notice when they
+are guessing. The project explores a more deliberate design: a cheap
+deterministic lookup for the easy majority of transactions, model judgment for
+the rest, a second pass that specifically targets the cases the model itself
+flagged as uncertain, and a downstream agent that turns the result into
+something a person can act on.
+
+---
+
+## What It Does
+
+- Accepts one or more statements per upload in CSV, PDF, PNG/JPG, or DOCX
+  format and merges them into a single transaction table.
+- Categorizes every transaction with a tool-calling agent that checks a local
+  known-merchant lookup first (instant, free, deterministic) and only falls
+  back to model judgment when the lookup has no answer.
+- Self-corrects: anything the agent itself marks low confidence gets a
+  second, stricter pass, with category definitions and a requirement to
+  reason before answering, instead of being shown to the user as-is.
+- Hands the categorized summary to a second agent, a Budget Advisor, which
+  checks each category''s spend against typical budgeting benchmarks via its
+  own tool and writes a plain-English recommendation.
+- Includes a hand-labeled evaluation set and a script that measures
+  categorization accuracy against it end-to-end.
+
+---
+
+## How It Works
+
+1. **Extraction agent** reads the file directly, using Claude''s native
+   PDF/image input or extracted text for DOCX, and returns structured
+   `{date, description, amount}` rows.
+2. **Categorizer agent** runs a tool-calling loop: known-merchant lookup
+   first, model judgment as fallback, flagging its own low-confidence
+   guesses.
+3. **Self-correction pass** re-runs only the low-confidence rows through a
+   stricter prompt before finalizing.
+4. **Budget Advisor agent** reviews the categorized totals against spending
+   benchmarks, using its own tool, and writes advice.
+
+Every agent in the system is the same underlying mechanism: call the model,
+check if it asked to use a tool, run the tool, feed the result back, repeat
+until it gives a final answer, specialized by system prompt and tool access.
+Writing that loop by hand once and reusing the pattern across four different
+agents was the actual point of the project.
+
+---
+
+## Technical Profile
+
+### Languages and Runtime
+
+- Python
+- Streamlit
+
+### AI and Data Capabilities
+
+- Hand-rolled tool-calling agent loop (no agent framework)
+- Multi-agent handoff between categorization and budget advice
+- Self-correction / re-verification of low-confidence model outputs
+- Multi-format document extraction (CSV, PDF, image, DOCX)
+- Evaluation harness for categorization accuracy
+
+### Libraries and Services
+
+- Anthropic Claude API (`claude-haiku-4-5`) for categorization,
+  self-correction, document/image extraction, and budget advice
+- pandas for tabular handling
+- python-docx for Word document text extraction
+- GitHub + Streamlit Community Cloud for free hosting
+
+---
+
+## Status
+
+- Hand-rolled agent loop with real tool-calling (categorization)
+- Self-correction pass on low-confidence results
+- Second agent (Budget Advisor) as the first multi-agent handoff
+- Multi-format, multi-file ingestion (CSV / PDF / image / DOCX via native
+  vision/document input)
+- Hand-labeled eval set and accuracy script
+- Deployed live demo on Streamlit Community Cloud
+- Not yet done: per-run cost/latency logging, a written design decisions doc
+
+---
+
+## Known Limitations
+
+- PDF/image extraction is best-effort; quality depends on how clean the
+  source scan or photo is, and it isn''t OCR-perfect.
+- No persistence yet: each upload is processed in-session, and nothing is
+  stored between visits.
+
+---
+
+## Recruiter-Relevant Value
+
+This project demonstrates the ability to build agentic AI systems from first
+principles rather than by wiring together a framework. Strong signals
+include:
+
+- hand-rolled agent loop design (call model, use tool, feed result back,
+  repeat)
+- multi-agent handoff and orchestration
+- self-correction / confidence-aware re-verification instead of blind
+  single-pass LLM output
+- multi-format document ingestion, including native vision/document model
+  input
+- a hand-labeled evaluation set and accuracy measurement, showing a testing
+  mindset applied to AI behavior, not just traditional code
+
+## Reuse Rules
+
+When using this knowledge base in a chatbot, portfolio, or public README:
+
+- Keep authentication descriptions high level.
+- Keep deployment descriptions high level.
+- Keep infrastructure descriptions generic.
+- Do not add private project configuration.
+- Do not add private operational notes.
+', 6
+where 'personal-finance-agent' is null
 on conflict (source_path) do update set
   project_id = excluded.project_id,
   title = excluded.title,
@@ -4194,7 +4720,7 @@ When using this knowledge base in a chatbot, portfolio, or public README:
 - Keep infrastructure descriptions generic.
 - Do not add private project configuration.
 - Do not add private operational notes.
-', 6
+', 7
 from (select 'portfolio-krutin-dev'::text as slug) input
 left join public.projects p on p.slug = input.slug
 where input.slug is not null
@@ -4736,7 +5262,7 @@ When using this knowledge base in a chatbot, portfolio, or public README:
 - Keep infrastructure descriptions generic.
 - Do not add private project configuration.
 - Do not add private operational notes.
-', 6
+', 7
 where 'portfolio-krutin-dev' is null
 on conflict (source_path) do update set
   project_id = excluded.project_id,
@@ -4895,7 +5421,7 @@ When using this knowledge base in a chatbot, portfolio, or public README:
 - Keep infrastructure descriptions generic.
 - Do not add private project configuration.
 - Do not add private operational notes.
-', 7
+', 8
 from (select 'ai-tool-suite'::text as slug) input
 left join public.projects p on p.slug = input.slug
 where input.slug is not null
@@ -5047,7 +5573,7 @@ When using this knowledge base in a chatbot, portfolio, or public README:
 - Keep infrastructure descriptions generic.
 - Do not add private project configuration.
 - Do not add private operational notes.
-', 7
+', 8
 where 'ai-tool-suite' is null
 on conflict (source_path) do update set
   project_id = excluded.project_id,
@@ -6653,7 +7179,7 @@ When using this knowledge base in a chatbot, portfolio, or public README:
 - Keep infrastructure descriptions generic.
 - Do not add private project configuration.
 - Do not add private operational notes.
-', 8
+', 9
 from (select 'hamdel-care-platform'::text as slug) input
 left join public.projects p on p.slug = input.slug
 where input.slug is not null
@@ -8252,7 +8778,7 @@ When using this knowledge base in a chatbot, portfolio, or public README:
 - Keep infrastructure descriptions generic.
 - Do not add private project configuration.
 - Do not add private operational notes.
-', 8
+', 9
 where 'hamdel-care-platform' is null
 on conflict (source_path) do update set
   project_id = excluded.project_id,
@@ -8470,7 +8996,7 @@ When using this knowledge base in a chatbot, portfolio, or public README:
 - Keep infrastructure descriptions generic.
 - Do not add private project configuration.
 - Do not add private operational notes.
-', 9
+', 10
 from (select 'fragments-Microservice'::text as slug) input
 left join public.projects p on p.slug = input.slug
 where input.slug is not null
@@ -8681,7 +9207,7 @@ When using this knowledge base in a chatbot, portfolio, or public README:
 - Keep infrastructure descriptions generic.
 - Do not add private project configuration.
 - Do not add private operational notes.
-', 9
+', 10
 where 'fragments-Microservice' is null
 on conflict (source_path) do update set
   project_id = excluded.project_id,
@@ -8824,7 +9350,7 @@ This design demonstrates separation between UI layout, controller behavior, doma
 - Room availability is updated when bookings are confirmed, cancelled, or checked out.
 - Cancellation uses a transaction, which helps keep related database updates consistent.
 - The project demonstrates strong use of JavaFX controls and event-driven UI programming.
-', 10
+', 11
 from (select 'hotel-reservation-system'::text as slug) input
 left join public.projects p on p.slug = input.slug
 where input.slug is not null
@@ -8960,7 +9486,7 @@ This design demonstrates separation between UI layout, controller behavior, doma
 - Room availability is updated when bookings are confirmed, cancelled, or checked out.
 - Cancellation uses a transaction, which helps keep related database updates consistent.
 - The project demonstrates strong use of JavaFX controls and event-driven UI programming.
-', 10
+', 11
 where 'hotel-reservation-system' is null
 on conflict (source_path) do update set
   project_id = excluded.project_id,
@@ -9168,7 +9694,7 @@ Bootstrap, and Tailwind CSS. The project helped me practice traditional
 full-stack architecture, especially routing, server-side rendering,
 authentication, and database-backed pages.
 
-', 11
+', 12
 from (select 'culinary-parcel'::text as slug) input
 left join public.projects p on p.slug = input.slug
 where input.slug is not null
@@ -9369,7 +9895,7 @@ Bootstrap, and Tailwind CSS. The project helped me practice traditional
 full-stack architecture, especially routing, server-side rendering,
 authentication, and database-backed pages.
 
-', 11
+', 12
 where 'culinary-parcel' is null
 on conflict (source_path) do update set
   project_id = excluded.project_id,
@@ -9552,7 +10078,7 @@ detail-page experience, Jotai for shared state, JWT for authentication, and
 MongoDB-backed API routes for favorites and history. The project helped me
 practice combining public API data with private user-specific features.
 
-', 12
+', 13
 from (select 'met-museum-explorer'::text as slug) input
 left join public.projects p on p.slug = input.slug
 where input.slug is not null
@@ -9728,7 +10254,7 @@ detail-page experience, Jotai for shared state, JWT for authentication, and
 MongoDB-backed API routes for favorites and history. The project helped me
 practice combining public API data with private user-specific features.
 
-', 12
+', 13
 where 'met-museum-explorer' is null
 on conflict (source_path) do update set
   project_id = excluded.project_id,

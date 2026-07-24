@@ -5,6 +5,7 @@ const KNOWLEDGE_FILES = [
   'about.md',
   'experience.md',
   'projects.md',
+  'projects/personal_finance_agent.md',
   'projects/ai_tool_suite.md',
   'projects/hamdel.md',
   'projects/fragments.md',
@@ -29,6 +30,20 @@ const MAX_KNOWLEDGE_CHARS = 80_000;
 const MAX_PROJECT_FILE_CHARS = 12_000;
 
 const PROJECT_KNOWLEDGE_FILES = [
+  {
+    fileName: 'projects/personal_finance_agent.md',
+    keywords: [
+      'finance agent',
+      'personal finance',
+      'budget',
+      'budgeting',
+      'categorize',
+      'categorization',
+      'bank statement',
+      'transactions',
+      'streamlit',
+    ],
+  },
   {
     fileName: 'projects/ai_tool_suite.md',
     keywords: [

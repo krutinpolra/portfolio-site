@@ -24,6 +24,44 @@ const profile = {
 
 const projects = [
   {
+    slug: 'personal-finance-agent',
+    title: 'Personal Finance Agent',
+    description:
+      'An AI agent that reads bank and credit-card statements in any format, categorizes every transaction with a self-correcting tool-calling loop, and hands off to a second agent that reviews spending and gives budget advice.',
+    longDescription:
+      'A hand-built multi-agent personal finance system: an extraction agent reads statements (CSV, PDF, image, or DOCX) into structured transactions, a categorizer agent uses a deterministic merchant lookup with LLM fallback and flags its own low-confidence guesses, a self-correction pass re-checks those flagged rows with a stricter prompt, and a Budget Advisor agent reviews the categorized totals against spending benchmarks to write plain-English recommendations. Built without an agent framework (no LangChain/CrewAI) specifically to learn how agent loops and multi-agent handoffs work under the hood.',
+    projectType: 'AI-powered personal finance categorization and budgeting agent',
+    primaryImageUrl: '/images/finance-agent-1.png',
+    githubUrl: 'https://github.com/krutinpolra/finance-agent',
+    liveUrl: 'https://finance-agent-xt7dfaw8bw6sgyjptd9drr.streamlit.app',
+    docsUrl: 'https://github.com/krutinpolra/finance-agent#readme',
+    hueA: 95,
+    hueB: 150,
+    featured: true,
+    displayOrder: 1,
+    technologies: [
+      'Python',
+      'Streamlit',
+      'Anthropic Claude API',
+      'pandas',
+      'python-docx',
+      'Multi-Agent Systems',
+      'Tool Calling',
+    ],
+    categories: ['AI', 'Python', 'full-stack'],
+    images: ['/images/finance-agent-1.png', '/images/finance-agent-2.png'],
+    features: [
+      'Accepts one or more statements per upload in CSV, PDF, PNG/JPG, or DOCX format and merges them into a single transaction table',
+      'Categorizes every transaction with a tool-calling agent that checks a deterministic known-merchant lookup first and only falls back to model judgment when needed',
+      'Self-corrects by re-running anything the agent itself flags as low confidence through a stricter, reasoning-required second pass',
+      'Hands the categorized summary to a second agent, a Budget Advisor, which checks category spend against budgeting benchmarks via its own tool and writes a plain-English recommendation',
+      'Uses Claude native PDF/image input for extraction and python-docx for Word document text extraction',
+      'Includes a hand-labeled evaluation set and script that measures categorization accuracy end-to-end',
+      'Hand-rolled agent loop reused across four specialized agents instead of relying on an agent framework',
+      'Deployed as a live demo on Streamlit Community Cloud',
+    ],
+  },
+  {
     slug: 'portfolio-krutin-dev',
     title: 'Personal Portfolio',
     description:
@@ -38,7 +76,7 @@ const projects = [
     hueA: 260,
     hueB: 320,
     featured: true,
-    displayOrder: 1,
+    displayOrder: 2,
     technologies: [
       'Next.js',
       'React',
@@ -81,7 +119,7 @@ const projects = [
     hueA: 235,
     hueB: 290,
     featured: true,
-    displayOrder: 2,
+    displayOrder: 3,
     technologies: [
       'TypeScript',
       'Node.js',
@@ -126,7 +164,7 @@ const projects = [
     hueA: 195,
     hueB: 155,
     featured: true,
-    displayOrder: 3,
+    displayOrder: 4,
     technologies: [
       'Full-Stack',
       'React',
@@ -166,7 +204,7 @@ const projects = [
     hueA: 230,
     hueB: 270,
     featured: true,
-    displayOrder: 4,
+    displayOrder: 5,
     technologies: [
       'Node.js',
       'Express',
@@ -211,7 +249,7 @@ const projects = [
       'https://github.com/krutinpolra/Application-Development-Workshops/tree/main/final%20project/video%20and%20reflaction',
     hueA: 280,
     hueB: 320,
-    displayOrder: 5,
+    displayOrder: 6,
     technologies: [
       'Java',
       'JavaFX',
@@ -253,7 +291,7 @@ const projects = [
     docsUrl: 'https://github.com/krutinpolra/WEB322-kbpolra#readme',
     hueA: 160,
     hueB: 200,
-    displayOrder: 6,
+    displayOrder: 7,
     technologies: [
       'Node.js',
       'Express.js',
@@ -293,7 +331,7 @@ const projects = [
     docsUrl: 'https://github.com/krutinpolra/met-museum#readme',
     hueA: 180,
     hueB: 210,
-    displayOrder: 7,
+    displayOrder: 8,
     technologies: [
       'Next.js',
       'React',
@@ -525,6 +563,11 @@ const knowledgeFiles = [
   { sourcePath: 'skills.md', title: 'Skills', projectSlug: null },
   { sourcePath: 'contact.md', title: 'Contact And Public Profiles', projectSlug: null },
   { sourcePath: 'projects.md', title: 'Projects Overview', projectSlug: null },
+  {
+    sourcePath: 'projects/personal_finance_agent.md',
+    title: 'Personal Finance Agent Knowledge Base',
+    projectSlug: 'personal-finance-agent',
+  },
   {
     sourcePath: 'projects/portfolio.md',
     title: 'Personal Portfolio Knowledge Base',

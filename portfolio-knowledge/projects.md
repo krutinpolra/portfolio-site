@@ -12,6 +12,36 @@ For detailed explanations, refer to individual project files in the `/projects` 
 
 ---
 
+## Personal Finance Agent
+
+**Slug:** personal-finance-agent  
+**Type:** AI-powered personal finance categorization and budgeting agent  
+**Detail File:** /projects/personal_finance_agent.md
+
+### Summary
+
+A hand-built multi-agent system that reads bank/credit-card statements in any
+format (CSV, PDF, image, or DOCX), categorizes every transaction, self-corrects
+its own low-confidence guesses, and hands the result to a Budget Advisor agent
+that reviews spending against benchmarks and gives plain-English advice. Built
+without an agent framework to learn how agent loops and multi-agent systems
+work from first principles.
+
+### Key Focus Areas
+
+- Hand-rolled tool-calling agent loop (no LangChain/CrewAI)
+- Multi-agent handoff between categorization and budget advice
+- Self-correction on low-confidence model outputs
+- Multi-format statement ingestion (CSV, PDF, image, DOCX)
+- Hand-labeled evaluation set and accuracy measurement
+
+### Recruiter Insight
+
+Demonstrates applied agentic AI engineering built from first principles,
+multi-agent orchestration, and a testing mindset applied to AI behavior.
+
+---
+
 ## Portfolio Website
 
 **Slug:** portfolio-krutin-dev  
@@ -198,9 +228,10 @@ When answering user queries:
   - "Explain this project" → Use detailed project file
   - "What projects has Krutin built?" → Use this overview
   - "Best project?" → Prioritize:
-    1. AI Job Search Assistant
-    2. Hamdel Care Platform
-    3. Fragments Microservice
+    1. Personal Finance Agent
+    2. AI Job Search Assistant
+    3. Hamdel Care Platform
+    4. Fragments Microservice
 
 ---
 
