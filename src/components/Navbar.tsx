@@ -7,6 +7,8 @@ import { MouseEvent, useEffect, useRef, useState } from 'react';
 const navLinks = [
   { name: 'Home', href: '/', sectionId: 'hero' },
   { name: 'About', href: '#about', sectionId: 'about' },
+  { name: 'Education', href: '#education', sectionId: 'education' },
+  { name: 'Certifications', href: '#certifications', sectionId: 'certifications' },
   { name: 'Experience', href: '#experience', sectionId: 'experience' },
   { name: 'Skills', href: '#techstack', sectionId: 'techstack' },
   { name: 'Projects', href: '#projectsection', sectionId: 'projectsection' },

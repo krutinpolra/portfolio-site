@@ -1,6 +1,8 @@
 import TechStack from '@/components/TechStack';
 import About from '@/components/About';
 import ProjectSection from '@/components/ProjectSection';
+import Education from '@/components/Education';
+import Certifications from '@/components/Certifications';
 import Experience from '@/components/Experience';
 import GitHubContributions from '@/components/GitHubContributions';
 import {
@@ -28,6 +30,8 @@ export default async function HomePage() {
     <>
       <About profile={profile} contactLinks={contactLinks} />
       <GitHubContributions />
+      <Education />
+      <Certifications />
       <Experience experiences={experiences} />
       <TechStack skillGroups={skillGroups} />
       <ProjectSection projects={projects} />
